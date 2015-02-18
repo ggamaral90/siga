@@ -89,6 +89,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>siga</groupId>
+			<artifactId>siga-vraptor-module</artifactId>
+		</dependency>
+	
+		<dependency>
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>jsr311-api</artifactId>
 		</dependency>
