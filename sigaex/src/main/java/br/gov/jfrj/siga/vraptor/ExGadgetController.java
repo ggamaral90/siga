@@ -81,7 +81,7 @@ public class ExGadgetController extends ExController {
 	}
 
 	@Get("app/expediente/gadget")
-	public void execute(String idTpMarcadorExcluir, Integer idTpFormaDoc) throws Exception {
+	public void execute(String idTpMarcadorExcluir, Integer idTpFormaDoc, boolean apenasQuadro) throws Exception {
 		this.setIdTpFormaDoc(idTpFormaDoc);
 		if (this.getIdTpFormaDoc() == null || this.getIdTpFormaDoc() == 0)
 			throw new Exception(
@@ -119,6 +119,7 @@ public class ExGadgetController extends ExController {
 		result.include("titular", this.getTitular());
 		result.include("lotaTitular", this.getLotaTitular());
 		result.include("idTpFormaDoc", this.getIdTpFormaDoc());
+		result.include("apenasQuadro", apenasQuadro);
 	}
 
 	public void test() throws Exception {
@@ -127,7 +128,7 @@ public class ExGadgetController extends ExController {
 			setIdTpFormaDoc(1);
 		setTitular(pes);
 		setLotaTitular(pes.getLotacao());
-		execute(null, null);
+		execute(null, null, Boolean.FALSE);
 	}
 
 	public List getListEstados() {
