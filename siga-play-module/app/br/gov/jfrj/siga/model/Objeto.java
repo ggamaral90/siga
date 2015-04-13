@@ -53,6 +53,8 @@ import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.type.EntityType;
 import org.hibernate.type.Type;
 
+import play.db.jpa.JPABase;
+
 
 @MappedSuperclass
 public class Objeto extends ObjetoBase{
@@ -98,11 +100,11 @@ public class Objeto extends ObjetoBase{
 	
 	private static final long serialVersionUID = -7830448334427331897L;
 
-	protected static EntityManager em() {
+	public static EntityManager em() {
 		return ContextoPersistencia.em();
 	}
 
-	public void save() {
+	public <T extends JPABase> T save() {
 		if (!em().contains(this)) {
 			em().persist(this);
 		}
@@ -131,10 +133,11 @@ public class Objeto extends ObjetoBase{
 			throw new RuntimeException(e);
 		} finally {
 			avoidCascadeSaveLoops.get().clear();
-		}
+		}		
+		return (T) this;
 	}
 
-	public void delete() {
+	public <T extends JPABase> T delete() {
 		try {
 			avoidCascadeSaveLoops.set(new HashSet<Objeto>());
 			try {
@@ -164,6 +167,7 @@ public class Objeto extends ObjetoBase{
 		} catch (Throwable e) {
 			throw new RuntimeException(e);
 		}
+		return (T) this;
 	}
 
 	public Object _key() {
