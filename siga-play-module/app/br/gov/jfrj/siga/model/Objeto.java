@@ -53,9 +53,6 @@ import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.type.EntityType;
 import org.hibernate.type.Type;
 
-import play.db.jpa.JPABase;
-
-
 @MappedSuperclass
 public class Objeto extends ObjetoBase{
 
@@ -86,6 +83,7 @@ public class Objeto extends ObjetoBase{
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public boolean isInstance(Class clazz) {
 		return this.getClass().isAssignableFrom(clazz);
 	}
@@ -94,6 +92,7 @@ public class Objeto extends ObjetoBase{
 		return this;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Objeto unproxyIfInstance(Class clazz) {
 		return isInstance(clazz) ? this : null;
 	}
@@ -104,7 +103,8 @@ public class Objeto extends ObjetoBase{
 		return ContextoPersistencia.em();
 	}
 
-	public <T extends JPABase> T save() {
+	@SuppressWarnings("unchecked")
+	public Objeto save() {
 		if (!em().contains(this)) {
 			em().persist(this);
 		}
@@ -134,10 +134,11 @@ public class Objeto extends ObjetoBase{
 		} finally {
 			avoidCascadeSaveLoops.get().clear();
 		}		
-		return (T) this;
+		return this;
 	}
 
-	public <T extends JPABase> T delete() {
+	@SuppressWarnings("unchecked")
+	public Objeto delete() {
 		try {
 			avoidCascadeSaveLoops.set(new HashSet<Objeto>());
 			try {
@@ -167,7 +168,7 @@ public class Objeto extends ObjetoBase{
 		} catch (Throwable e) {
 			throw new RuntimeException(e);
 		}
-		return (T) this;
+		return this;
 	}
 
 	public Object _key() {
@@ -181,6 +182,7 @@ public class Objeto extends ObjetoBase{
 	public transient boolean willBeSaved = false;
 	static transient ThreadLocal<Set<Objeto>> avoidCascadeSaveLoops = new ThreadLocal<Set<Objeto>>();
 
+	@SuppressWarnings("rawtypes")
 	private void saveAndCascade(boolean willBeSaved) throws UnexpectedException {
 		this.willBeSaved = willBeSaved;
 		if (avoidCascadeSaveLoops.get().contains(this)) {
@@ -282,6 +284,7 @@ public class Objeto extends ObjetoBase{
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	private static void cascadeOrphans(Objeto base,
 			PersistentCollection persistentCollection, boolean willBeSaved)
 			throws UnexpectedException {
@@ -394,6 +397,7 @@ public class Objeto extends ObjetoBase{
 		return getClass().getSimpleName() + "[" + keyStr + "]";
 	}
 
+	@SuppressWarnings("serial")
 	public static class JPAQueryException extends RuntimeException {
 
 		public JPAQueryException(String message) {

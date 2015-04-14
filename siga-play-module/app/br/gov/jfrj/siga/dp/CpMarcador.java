@@ -34,6 +34,7 @@ import br.gov.jfrj.siga.model.ActiveRecord;
 @Table(name = "CP_MARCADOR", schema = "CORPORATIVO")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class CpMarcador extends AbstractCpMarcador {
+	private static final long serialVersionUID = 1292237893675586170L;
 
 	final static public long MARCADOR_EM_ELABORACAO = 1;
 
