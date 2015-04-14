@@ -1,6 +1,6 @@
 package br.gov.jfrf.siga.sr.controllers;
 
-import br.gov.jfrf.siga.sr.models.SrSolicitacao;
+import br.gov.jfrf.siga.sr.model.SrSolicitacao;
 import br.gov.jfrj.siga.base.SigaBaseProperties;
 import br.gov.jfrj.siga.dp.DpPessoa;
 import play.Play;

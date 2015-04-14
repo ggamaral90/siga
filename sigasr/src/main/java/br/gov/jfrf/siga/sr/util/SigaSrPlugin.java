@@ -2,7 +2,7 @@ package br.gov.jfrf.siga.sr.util;
 
 import java.util.HashMap;
 
-import br.gov.jfrf.siga.sr.models.Sr;
+import br.gov.jfrf.siga.sr.model.Sr;
 import br.gov.jfrj.siga.base.SigaBaseProperties;
 import br.gov.jfrj.siga.cp.bl.Cp;
 import play.Logger;

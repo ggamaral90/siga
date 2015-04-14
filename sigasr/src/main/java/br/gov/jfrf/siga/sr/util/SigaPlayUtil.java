@@ -1,6 +1,6 @@
 package br.gov.jfrf.siga.sr.util;
 
-import br.gov.jfrf.siga.sr.models.SrItemConfiguracao;
+import br.gov.jfrf.siga.sr.model.SrItemConfiguracao;
 
 public class SigaPlayUtil {
 

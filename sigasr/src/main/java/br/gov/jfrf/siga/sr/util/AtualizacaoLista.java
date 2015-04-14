@@ -1,6 +1,6 @@
 package br.gov.jfrf.siga.sr.util;
 
-import br.gov.jfrf.siga.sr.models.SrPrioridade;
+import br.gov.jfrf.siga.sr.model.SrPrioridade;
 
 public class AtualizacaoLista {
 

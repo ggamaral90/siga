@@ -3,7 +3,7 @@ package br.gov.jfrf.siga.sr.util;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import br.gov.jfrf.siga.sr.models.SrAcordo;
+import br.gov.jfrf.siga.sr.model.SrAcordo;
 import play.data.binding.Global;
 import play.data.binding.TypeBinder;
 

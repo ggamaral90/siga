@@ -17,13 +17,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import controllers.SigaApplication;
-import br.gov.jfrf.siga.sr.models.DadosRH;
-import br.gov.jfrf.siga.sr.models.DadosRH.Cargo;
-import br.gov.jfrf.siga.sr.models.DadosRH.Funcao;
-import br.gov.jfrf.siga.sr.models.DadosRH.Lotacao;
-import br.gov.jfrf.siga.sr.models.DadosRH.Orgao;
-import br.gov.jfrf.siga.sr.models.DadosRH.Papel;
-import br.gov.jfrf.siga.sr.models.DadosRH.Pessoa;
+import br.gov.jfrf.siga.sr.model.DadosRH;
+import br.gov.jfrf.siga.sr.model.DadosRH.Cargo;
+import br.gov.jfrf.siga.sr.model.DadosRH.Funcao;
+import br.gov.jfrf.siga.sr.model.DadosRH.Lotacao;
+import br.gov.jfrf.siga.sr.model.DadosRH.Orgao;
+import br.gov.jfrf.siga.sr.model.DadosRH.Papel;
+import br.gov.jfrf.siga.sr.model.DadosRH.Pessoa;
 import play.mvc.Controller;
 
 public class Corporativo extends SigaApplication {

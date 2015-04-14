@@ -5,7 +5,7 @@ import java.util.Date;
 
 import org.joda.time.Interval;
 
-import br.gov.jfrf.siga.sr.models.SrSolicitacao;
+import br.gov.jfrf.siga.sr.model.SrSolicitacao;
 
 public class Cronometro {
 

@@ -9,6 +9,7 @@ import play.db.jpa.JPA;
 
 @MappedSuperclass
 public abstract class ObjetoBase extends GenericModel {
+	private static final long serialVersionUID = -4554390471321555092L;
 
 	public void salvar() throws Exception {
 		try {

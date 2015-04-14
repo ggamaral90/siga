@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import br.gov.jfrf.siga.sr.models.SrGestorItem;
-import br.gov.jfrf.siga.sr.models.SrMovimentacao;
-import br.gov.jfrf.siga.sr.models.SrSolicitacao;
-import br.gov.jfrf.siga.sr.models.SrTipoMovimentacao;
+import br.gov.jfrf.siga.sr.model.SrGestorItem;
+import br.gov.jfrf.siga.sr.model.SrMovimentacao;
+import br.gov.jfrf.siga.sr.model.SrSolicitacao;
+import br.gov.jfrf.siga.sr.model.SrTipoMovimentacao;
 import br.gov.jfrj.siga.dp.DpLotacao;
 import br.gov.jfrj.siga.dp.DpPessoa;
 import play.Logger;

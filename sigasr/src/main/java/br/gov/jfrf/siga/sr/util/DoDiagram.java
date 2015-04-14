@@ -1,16 +1,16 @@
 package br.gov.jfrf.siga.sr.util;
 
-import br.gov.jfrf.siga.sr.models.SrAcao;
-import br.gov.jfrf.siga.sr.models.SrArquivo;
-import br.gov.jfrf.siga.sr.models.SrItemConfiguracao;
-import br.gov.jfrf.siga.sr.models.SrLista;
-import br.gov.jfrf.siga.sr.models.SrMovimentacao;
-import br.gov.jfrf.siga.sr.models.SrPergunta;
-import br.gov.jfrf.siga.sr.models.SrPesquisa;
-import br.gov.jfrf.siga.sr.models.SrResposta;
-import br.gov.jfrf.siga.sr.models.SrSolicitacao;
-import br.gov.jfrf.siga.sr.models.SrTipoMovimentacao;
-import br.gov.jfrf.siga.sr.models.SrTipoPergunta;
+import br.gov.jfrf.siga.sr.model.SrAcao;
+import br.gov.jfrf.siga.sr.model.SrArquivo;
+import br.gov.jfrf.siga.sr.model.SrItemConfiguracao;
+import br.gov.jfrf.siga.sr.model.SrLista;
+import br.gov.jfrf.siga.sr.model.SrMovimentacao;
+import br.gov.jfrf.siga.sr.model.SrPergunta;
+import br.gov.jfrf.siga.sr.model.SrPesquisa;
+import br.gov.jfrf.siga.sr.model.SrResposta;
+import br.gov.jfrf.siga.sr.model.SrSolicitacao;
+import br.gov.jfrf.siga.sr.model.SrTipoMovimentacao;
+import br.gov.jfrf.siga.sr.model.SrTipoPergunta;
 import br.gov.jfrj.siga.model.Diagram;
 
 public class DoDiagram {

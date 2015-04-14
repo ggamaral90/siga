@@ -8,11 +8,11 @@ import java.util.Comparator;
 import java.util.List;
 
 import play.db.jpa.JPA;
-import br.gov.jfrf.siga.sr.models.SrAcordo;
-import br.gov.jfrf.siga.sr.models.SrAtributo;
-import br.gov.jfrf.siga.sr.models.SrAtributoSolicitacao;
-import br.gov.jfrf.siga.sr.models.SrLista;
-import br.gov.jfrf.siga.sr.models.SrSolicitacao;
+import br.gov.jfrf.siga.sr.model.SrAcordo;
+import br.gov.jfrf.siga.sr.model.SrAtributo;
+import br.gov.jfrf.siga.sr.model.SrAtributoSolicitacao;
+import br.gov.jfrf.siga.sr.model.SrLista;
+import br.gov.jfrf.siga.sr.model.SrSolicitacao;
 import br.gov.jfrj.siga.dp.CpMarcador;
 import br.gov.jfrj.siga.dp.DpLotacao;
 import br.gov.jfrj.siga.dp.DpPessoa;

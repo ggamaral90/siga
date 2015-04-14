@@ -3,10 +3,10 @@ package br.gov.jfrf.siga.sr.util;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import br.gov.jfrf.siga.sr.models.SrAcao;
-import br.gov.jfrf.siga.sr.models.SrItemConfiguracao;
-import br.gov.jfrf.siga.sr.models.SrLista;
-import br.gov.jfrf.siga.sr.models.SrSelecionavel;
+import br.gov.jfrf.siga.sr.model.SrAcao;
+import br.gov.jfrf.siga.sr.model.SrItemConfiguracao;
+import br.gov.jfrf.siga.sr.model.SrLista;
+import br.gov.jfrf.siga.sr.model.SrSelecionavel;
 import br.gov.jfrj.siga.dp.DpLotacao;
 import br.gov.jfrj.siga.dp.DpPessoa;
 import play.data.binding.Global;
