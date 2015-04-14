@@ -44,62 +44,34 @@
 		
 <!-- 			colocar as classes do SigaSR -->
 
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-<!-- 		<class>br.gov.jfrj.siga.sr.models.</class> -->
-
-
+		<class>br.gov.jfrj.siga.sr.models.DadosRH</class>
+		<class>br.gov.jfrj.siga.sr.models.SrAcao</class>
+		<class>br.gov.jfrj.siga.sr.models.SrAcao</class>
+		<class>br.gov.jfrj.siga.sr.models.SrAcordo</class>
+		<class>br.gov.jfrj.siga.sr.models.SrArquivo</class>
+		<class>br.gov.jfrj.siga.sr.models.SrAtributo</class>
+		<class>br.gov.jfrj.siga.sr.models.SrAtributoAcordo</class>
+		<class>br.gov.jfrj.siga.sr.models.SrAtributoSolicitacao</class>
+		<class>br.gov.jfrj.siga.sr.models.SrConfiguracao</class>
+		<class>br.gov.jfrj.siga.sr.models.SrConfiguracaoIgnorada</class>
+		<class>br.gov.jfrj.siga.sr.models.SrDisponibilidade</class>
+		<class>br.gov.jfrj.siga.sr.models.SrEquipe</class>
+		<class>br.gov.jfrj.siga.sr.models.SrExcecaoHorario</class>
+		<class>br.gov.jfrj.siga.sr.models.SrFatorMultiplicacao</class>
+		<class>br.gov.jfrj.siga.sr.models.SrGestorItem</class>
+		<class>br.gov.jfrj.siga.sr.models.SrItemConfiguracao</class>
+		<class>br.gov.jfrj.siga.sr.models.SrLista</class>
+		<class>br.gov.jfrj.siga.sr.models.SrMarca</class>
+		<class>br.gov.jfrj.siga.sr.models.SrObjetivoAtributo</class>
+		<class>br.gov.jfrj.siga.sr.models.SrPergunta</class>
+		<class>br.gov.jfrj.siga.sr.models.SrPesquisa</class>
+		<class>br.gov.jfrj.siga.sr.models.SrPrioridadeSolicitacao</class>
+		<class>br.gov.jfrj.siga.sr.models.SrResposta</class>
+		<class>br.gov.jfrj.siga.sr.models.SrSolicitacao</class>
+		<class>br.gov.jfrj.siga.sr.models.SrTipoAcao</class>
+		<class>br.gov.jfrj.siga.sr.models.SrTipoMovimentacao</class>
+		<class>br.gov.jfrj.siga.sr.models.SrTipoPergunta</class>
+		<class>br.gov.jfrj.siga.sr.models.SrTipoPermissaoLista</class>
 
 		<properties>
 			<property name="hibernate.current_session_context_class"
