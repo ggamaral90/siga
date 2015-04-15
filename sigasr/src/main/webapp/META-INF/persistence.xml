@@ -62,6 +62,7 @@
 		<class>br.gov.jfrj.siga.sr.model.SrItemConfiguracao</class>
 		<class>br.gov.jfrj.siga.sr.model.SrLista</class>
 		<class>br.gov.jfrj.siga.sr.model.SrMarca</class>
+		<class>br.gov.jfrj.siga.sr.model.SrMovimentacao</class>
 		<class>br.gov.jfrj.siga.sr.model.SrObjetivoAtributo</class>
 		<class>br.gov.jfrj.siga.sr.model.SrPergunta</class>
 		<class>br.gov.jfrj.siga.sr.model.SrPesquisa</class>
