@@ -4,6 +4,7 @@
 		<module-alias name="sigasr" />
 		<exclusions>
 			<module name="org.apache.xalan" />
+			<module name="org.antlr"/>
 		</exclusions>
 		
 <!-- 		<dependencies> -->

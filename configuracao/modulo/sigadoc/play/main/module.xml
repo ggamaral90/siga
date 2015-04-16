@@ -30,7 +30,7 @@
         <resource-root path="org.eclipse.jdt.core-3.10.0.v20140604-1726.jar"/>
         <resource-root path="ivy-2.3.0.jar"/>
         <resource-root path="snakeyaml-1.13.jar"/>
-        <resource-root path="antlr-2.7.7.jar"/>
+        <resource-root path="antlr-3.5.2.jar"/>
         <resource-root path="c3p0-0.9.2.1.jar"/>
         <resource-root path="cglib-nodep-3.1.jar"/>
         <resource-root path="gson-2.2.4.jar"/>

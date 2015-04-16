@@ -61,7 +61,7 @@ public class SrAcao extends HistoricoSuporte implements SrSelecionavel, Comparab
 	public SrTipoAcao tipoAcao;
 
 	@OneToMany(targetEntity = SrAcao.class, mappedBy = "acaoInicial", fetch = FetchType.LAZY)
-	//@OrderBy("hisDtIni desc")
+	@OrderBy("hisDtIni desc")
 	public List<SrAcao> meuAcaoHistoricoSet;
 
 	@ManyToOne()
