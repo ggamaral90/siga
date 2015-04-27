@@ -74,4 +74,8 @@
 		<name>select</name>
 		<path>/META-INF/tags/select.tag</path>
 	</tag-file>
+	<tag-file>
+		<name>modal</name>
+		<path>/META-INF/tags/modal.tag</path>
+	</tag-file>
 </taglib>
