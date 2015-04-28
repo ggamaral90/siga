@@ -9,11 +9,11 @@
 <%@ attribute name="nomeSelCargo" required="false"%>
 <%@ attribute name="nomeSelGrupo" required="false"%>
 
-<%-- <%@ attribute name="valuePessoa" required="false"%> --%>
-<%-- <%@ attribute name="valueLotacao" required="false"%> --%>
-<%-- <%@ attribute name="valueFuncao" required="false"%> --%>
-<%-- <%@ attribute name="valueCargo" required="false"%> --%>
-<%-- <%@ attribute name="valueGrupo" required="false"%> --%>
+<%@ attribute name="valuePessoa" required="false"%>
+<%@ attribute name="valueLotacao" required="false"%>
+<%@ attribute name="valueFuncao" required="false"%>
+<%@ attribute name="valueCargo" required="false"%>
+<%@ attribute name="valueGrupo" required="false"%>
 
 
 <%@ attribute name="disabled" required="false"%>
@@ -43,30 +43,29 @@
 </select>
 
 <span id="spanPessoa${nomeSelPessoaClean}">
-	${nomeSelPessoaClean}
-	<siga:selecao propriedade="${nomeSelPessoaClean}" tema="simple" modulo="siga" urlAcao="pessoa/buscar" urlSelecionar="selecionar" desativar="${desativar}"/>
+	<siga:selecao tipo="pessoa" propriedade="pessoa" tema="simple" modulo="siga" inputName="${nomeSelPessoaClean}" 
+		 urlAcao="buscar" desativar="${desativar}" siglaInicial="${valuePessoa}"/>
 </span>
 
 <span id="spanLotacao${nomeSelLotacaoClean}">
-	${nomeSelLotacaoClean}
-	<siga:selecao propriedade="${nomeSelLotacaoClean}" tema="simple" modulo="siga" urlAcao="pessoa/buscar" urlSelecionar="selecionar" desativar="${desativar}"/>
+	<siga:selecao tipo="lotacao" propriedade="lotacao" tema="simple" modulo="siga" inputName="${nomeSelLotacaoClean}" 
+		 urlAcao="buscar" desativar="${desativar}" siglaInicial="${valueLotacao}"/>
 </span>
 
 <span id="spanFuncao${nomeSelFuncaoClean}">
-	${nomeSelFuncaoClean}
-	<siga:selecao propriedade="${nomeSelFuncaoClean}" tema="simple" modulo="siga" urlAcao="pessoa/buscar" urlSelecionar="selecionar" desativar="${desativar}"/>
+	<siga:selecao tipo="funcao" propriedade="funcao" tema="simple" modulo="siga" inputName="${nomeSelFuncaoClean}" 
+		 urlAcao="buscar" desativar="${desativar}" siglaInicial="${valueFuncao}"/>
 </span>
 
 <span id="spanCargo${nomeSelCargoClean}">
-	${nomeSelCargoClean}
-	<siga:selecao propriedade="${nomeSelCargoClean}" tema="simple" modulo="siga" urlAcao="pessoa/buscar" urlSelecionar="selecionar" desativar="${desativar}"/>
+	<siga:selecao tipo="cargo" propriedade="cargo" tema="simple" modulo="siga" inputName="${nomeSelCargoClean}" 
+		 urlAcao="buscar" desativar="${desativar}" siglaInicial="${valueCargo}"/>
 </span>
 
 <span id="spanGrupo${nomeSelGrupoClean}">
-	${nomeSelGrupoClean}
-	<siga:selecao propriedade="${nomeSelGrupoClean}" tema="simple" modulo="siga" urlAcao="pessoa/buscar" urlSelecionar="selecionar" desativar="${desativar}"/>
+	<siga:selecao tipo="grupo" propriedade="grupo" tema="simple" modulo="siga" inputName="${nomeSelGrupoClean}" 
+		 urlAcao="buscar" desativar="${desativar}" siglaInicial="${valueGrupo}"/>
 </span>
-
 
 
 <script language="javascript">
@@ -78,37 +77,37 @@ var select = document.getElementById('${nomeSelPessoaClean}${nomeSelLotacaoClean
 // http://stackoverflow.com/questions/8893786/uncaught-referenceerror-x-is-not-defined
 function limparPessoa() {
 	document.getElementById('spanPessoa${nomeSelPessoaClean}').style.display = 'none';
-	document.getElementById('formulario_${nomeSelPessoaClean}Sel_sigla').value='';
-	document.getElementById('formulario_${nomeSelPessoaClean}Sel_descricao').value='';
-	document.getElementById('${nomeSelPessoaClean}SelSpan').innerHTML='';
+	document.getElementById('formulario_${nomeSelPessoaClean}_pessoaSel_sigla').value='';
+	document.getElementById('formulario_${nomeSelPessoaClean}_pessoaSel_descricao').value='';
+	document.getElementById('pessoa_pessoaSelSpan').innerHTML='';
 }
 
 function limparLotacao() {
 	document.getElementById('spanLotacao${nomeSelLotacaoClean}').style.display = 'none';
-	document.getElementById('formulario_${nomeSelLotacaoClean}Sel_sigla').value='';
-	document.getElementById('formulario_${nomeSelLotacaoClean}Sel_descricao').value='';
-	document.getElementById('${nomeSelLotacaoClean}SelSpan').innerHTML='';
+	document.getElementById('formulario_${nomeSelLotacaoClean}_lotacaoSel_sigla').value='';
+	document.getElementById('formulario_${nomeSelLotacaoClean}_lotacaoSel_descricao').value='';
+	document.getElementById('lotacao_lotacaoSelSpan').innerHTML='';
 }
 
 function limparFuncao() {
 	document.getElementById('spanFuncao${nomeSelFuncaoClean}').style.display = 'none';
-	document.getElementById('formulario_${nomeSelFuncaoClean}Sel_sigla').value='';
-	document.getElementById('formulario_${nomeSelFuncaoClean}Sel_descricao').value='';
-	document.getElementById('${nomeSelFuncaoClean}SelSpan').innerHTML='';
+	document.getElementById('formulario_${nomeSelFuncaoClean}_funcaoSel_sigla').value='';
+	document.getElementById('formulario_${nomeSelFuncaoClean}_funcaoSel_descricao').value='';
+	document.getElementById('funcao_funcaoSelSpan').innerHTML='';
 }
 
 function limparCargo() {
 	document.getElementById('spanCargo${nomeSelCargoClean}').style.display = 'none';
-	document.getElementById('formulario_${nomeSelCargoClean}Sel_sigla').value='';
-	document.getElementById('formulario_${nomeSelCargoClean}Sel_descricao').value='';
-	document.getElementById('${nomeSelCargoClean}SelSpan').innerHTML='';
+	document.getElementById('formulario_${nomeSelCargoClean}_cargoSel_sigla').value='';
+	document.getElementById('formulario_${nomeSelCargoClean}_cargoSel_descricao').value='';
+	document.getElementById('cargo_cargoSelSpan').innerHTML='';
 }
 
 function limparGrupo() {
 	document.getElementById('spanGrupo${nomeSelGrupoClean}').style.display = 'none';
-	document.getElementById('formulario_${nomeSelGrupoClean}Sel_sigla').value='';
-	document.getElementById('formulario_${nomeSelGrupoClean}Sel_descricao').value='';
-	document.getElementById('${nomeSelGrupoClean}SelSpan').innerHTML='';
+	document.getElementById('formulario_${nomeSelGrupoClean}_grupoSel_sigla').value='';
+	document.getElementById('formulario_${nomeSelGrupoClean}_grupoSel_descricao').value='';
+	document.getElementById('grupo_grupoSelSpan').innerHTML='';
 }
 
 select.onchange = function(){

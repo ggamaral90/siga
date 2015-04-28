@@ -111,15 +111,7 @@ self.retorna_${propriedade}${tipoSel} = function(id, sigla, descricao) {
 self.newwindow_${propriedade} = '';
 self.popitup_${propriedade}${tipoSel} = function(sigla) {
 
-	<c:choose>
-		<c:when test="${empty urlSelecionar}">
-// 			var url = '/${urlPrefix}${acaoBusca}/selecionar.action?propriedade=${propriedade}${tipoSel}'+'${selecaoParams}';
-			var url = '/${urlPrefix}${acaoBusca}.action?propriedade=${propriedade}${tipoSel}&sigla='+encodeURI(sigla) +'${selecaoParams}';
-		</c:when>
-		<c:otherwise>
-			var url = '/${urlPrefix}${urlBuscar}?propriedade=${propriedade}${tipoSel}&sigla='+encodeURI(sigla) +'${selecaoParams}';
-		</c:otherwise>
-	</c:choose>
+	var url = '/${urlPrefix}${urlBuscar}?propriedade=${propriedade}${tipoSel}&sigla='+encodeURI(sigla) +'${selecaoParams}';
 	
 		
 	if (!newwindow_${propriedade}.closed && newwindow_${propriedade}.location) {
