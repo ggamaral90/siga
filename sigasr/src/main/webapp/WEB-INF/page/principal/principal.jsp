@@ -2,13 +2,3 @@
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
 <siga:pagina titulo="Serviços"></siga:pagina>
-
-<siga:pessoaLotaFuncCargoSelecao
-	nomeSelLotacao='lotacao'
-	nomeSelPessoa='dpPessoa'
-	nomeSelFuncao='funcaoConfianca'
-	nomeSelCargo='cargo'
-	nomeSelGrupo='cpGrupo'
-	>
-	
-</siga:pessoaLotaFuncCargoSelecao>
