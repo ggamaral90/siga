@@ -2,6 +2,7 @@ package br.gov.jfrj.siga.sr.vraptor;
 
 import static br.gov.jfrj.siga.sr.util.SrSigaPermissaoPerfil.ADM_ADMINISTRAR;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,8 +31,10 @@ public class AcaoController extends SrController {
 
 	@Path("/listar/{mostrarDesativados}")
 	public void listar(boolean mostrarDesativados) throws Exception {
-		assertAcesso(ADM_ADMINISTRAR);
-		List<SrAcao> acoes = SrAcao.listar(mostrarDesativados);
+		//TODO    Anderson Liberar acesso
+		//assertAcesso(ADM_ADMINISTRAR);
+		//List<SrAcao> acoes = SrAcao.listar(mostrarDesativados);
+		List<SrAcao> acoes = new ArrayList<>();
 
 		result.include(ACOES, acoes);
 		result.include("mostrarDesativados", mostrarDesativados);

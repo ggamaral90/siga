@@ -1,15 +1,5 @@
-<%-- #{extends 'main.html' /} #{set title:'Ações' /} --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
-
-<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-<script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-<script src="/siga/javascript/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
-<script src="/sigasr/public/javascripts/jquery.serializejson.min.js"></script>
-<script src="/sigasr/public/javascripts/jquery.populate.js"></script>
-<script src="/sigasr/public/javascripts/base-service.js"></script>
-<script src="/sigasr/public/javascripts/jquery.validate.min.js"></script>
-<script src="/sigasr/public/javascripts/language/messages_pt_BR.min.js"></script>
 
 <siga:pagina titulo="Servi�os">
 	<div class="gt-bd clearfix">
@@ -34,11 +24,11 @@
 					</thead>
 					<tbody>
 						<c:forEach items="${acoes}" var="acao">
-							<tr <c:if test="${!acao.ativo}">class="configuracao-herdada"</c:if> data-json-id="${acao.idAcao}" data-json="${acao.toJson()}" onclick="acaoService.editar($(this).data('json'), 'Alterar A&ccedil;&atilde;o')" style="cursor: pointer;">
+							<tr <c:if test="${!acao.ativo}"> class="configuracao-herdada" </c:if> data-json-id="${acao.idAcao}" data-json="${acao.toJson()}" onclick="acaoService.editar($(this).data('json'), 'Alterar A&ccedil;&atilde;o')" style="cursor: pointer;">
 								<td>${acao.siglaAcao}</td>
 								<td>
 									<span style="margin-left: ${(acao.nivel-1)*2}em; <c:if test="${acao.nivel == 1}">font-weight: bold;</c:if>">
-										<siga:selecionado sigla="${acao.atual != null ? acao.atual.tituloAcao : ''}" descricao="${acao.atual != null ? acao.atual.descricao : ''}"></siga:selecionado>
+										<siga:selecionado sigla="${acao.atual.tituloAcao}" descricao="${acao.atual.descricao}"></siga:selecionado>
 									</span>
 								</td>
 								<td>${acao.descrAcao}</td>
@@ -94,9 +84,9 @@
 	}();
 
 	var opts = {
-			 urlDesativar : '@{Application.desativarAcao()}?',
-			 urlReativar : '@{Application.reativarAcao()}?',
-			 urlGravar : '@{Application.gravarAcao()}',
+			 urlDesativar : "${linkTo[AcaoController].desativarAcao}",
+			 urlReativar : "${linkTo[AcaoController].reativarAcao}",
+			 urlGravar : "${linkTo[AcaoController].gravarAcao}",
 			 dialogCadastro : $('#acao_dialog'),
 			 tabelaRegistros : $('#acoes_table'),
 			 objectName : 'acao',
@@ -114,9 +104,9 @@
 		$("#checkmostrarDesativado").click(function() {
 			jQuery.blockUI(objBlock);
 			if (document.getElementById('checkmostrarDesativado').checked)
-				location.href = '@{Application.listarAcaoDesativados()}';
+				location.href = "${linkTo[AcaoController].listarAcaoDesativados}";
 			else
-				location.href = '@{Application.listarAcao()}';	
+				location.href = "${linkTo[AcaoController].listarAcao}";
 		});
 		
 		/* Table initialization */
@@ -199,3 +189,12 @@
 		acaoService.editar(acao, 'Alterar A&ccedil;&atilde;o');
 	}
 </script>
+
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<script src="/siga/javascript/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="/sigasr/public/javascripts/jquery.serializejson.min.js"></script>
+<script src="/sigasr/public/javascripts/jquery.populate.js"></script>
+<script src="/sigasr/public/javascripts/base-service.js"></script>
+<script src="/sigasr/public/javascripts/jquery.validate.min.js"></script>
+<script src="/sigasr/public/javascripts/language/messages_pt_BR.min.js"></script>

@@ -94,7 +94,7 @@ public class Application extends SigaApplication {
 		} catch (Exception e) {
 			renderArgs.put("exibirMenuAdministrar", false);
 		}
-		
+
 		try {
 			assertAcesso("EDTCONH:Criar Conhecimentos");
 			renderArgs.put("exibirMenuConhecimentos", true);
@@ -113,7 +113,7 @@ public class Application extends SigaApplication {
 	public static boolean ocultas() {
 		return Boolean.parseBoolean(params.get("ocultas"));
 	}
-	
+
 	public static boolean todoOContexto() {
 		return Boolean.parseBoolean(params.get("todoOContexto"));
 	}
@@ -149,14 +149,14 @@ public class Application extends SigaApplication {
 	}
 
 	public static void editar(Long id) throws Exception {
-		
+
 		SrSolicitacao solicitacao;
 		if (id == null) {
 			solicitacao = new SrSolicitacao();
 			solicitacao.solicitante = titular();
 		} else
 			solicitacao = SrSolicitacao.findById(id);
-		
+
 		if (solicitacao.dtOrigem == null)
 			solicitacao.dtOrigem = new Date();
 		if (solicitacao.dtIniEdicao == null)
@@ -170,14 +170,14 @@ public class Application extends SigaApplication {
 			throws Exception {
 		render(solicitacao.deduzirLocalRamalEMeioContato());
 	}
-	
+
 	public static void listarAcoesSlugify(){
 		String acoes = "";
 		for (Object o : SrAcao.listar(false)){
 			SrAcao a = (SrAcao) o;
-			acoes += a.siglaAcao + "&nbsp;&nbsp;" + (a.getGcTags()) + "<br/>";
+			acoes += a.getSiglaAcao() + "&nbsp;&nbsp;" + (a.getGcTags()) + "<br/>";
 		}
-		
+
 		String itens = "";
 		for (Object o : SrItemConfiguracao.listar(false)){
 			SrItemConfiguracao a = (SrItemConfiguracao) o;
@@ -185,10 +185,10 @@ public class Application extends SigaApplication {
 		}
 		render(acoes, itens);
 	}
-	
-	public static void listarSolicitacoesRelacionadas(SrSolicitacaoFiltro solicitacao, HashMap<Long, String> atributoSolicitacaoMap) 
+
+	public static void listarSolicitacoesRelacionadas(SrSolicitacaoFiltro solicitacao, HashMap<Long, String> atributoSolicitacaoMap)
 			throws Exception{
-		
+
 		solicitacao.setAtributoSolicitacaoMap(atributoSolicitacaoMap);
 		List<Object[]> solicitacoesRelacionadas = solicitacao.buscarSimplificado();
 		render(solicitacoesRelacionadas);
@@ -206,7 +206,7 @@ public class Application extends SigaApplication {
 	public static List<SrAtributo> atributosDisponiveisAdicaoConsulta(SrSolicitacaoFiltro filtro) {
 		List<SrAtributo> listaAtributosAdicao = new ArrayList<SrAtributo>();
 		HashMap<Long, String> atributoMap = filtro.getAtributoSolicitacaoMap();
-		
+
 		for (SrAtributo srAtributo : SrAtributo.listarParaSolicitacao(Boolean.FALSE)) {
 			if (!atributoMap.containsKey(srAtributo.idAtributo)) {
 				listaAtributosAdicao.add(srAtributo);
@@ -214,12 +214,12 @@ public class Application extends SigaApplication {
 		}
 		return listaAtributosAdicao;
 	}
-	
+
 	public static void exibirItemConfiguracao(SrSolicitacao solicitacao)
 			throws Exception {
 		if (solicitacao.solicitante == null)
 			render(solicitacao);
-		
+
 		if (!solicitacao.getItensDisponiveis().contains(
 				solicitacao.itemConfiguracao))
 			solicitacao.itemConfiguracao = null;
@@ -234,7 +234,7 @@ public class Application extends SigaApplication {
 		Map<SrAcao, List<SrTarefa>> acoesEAtendentes = solicitacao.getAcoesEAtendentes();
 		render(solicitacao, acoesEAtendentes);
 	}
-	
+
 	public static void exibirAcaoEscalonar(Long id, Long itemConfiguracao) throws Exception {
 		SrSolicitacao solicitacao = SrSolicitacao.findById(id);
 		solicitacao.titular = titular();
@@ -254,10 +254,10 @@ public class Application extends SigaApplication {
 
 	@SuppressWarnings("unchecked")
 	private static void formEditar(SrSolicitacao solicitacao) throws Exception {
-		
+
 		List<CpComplexo> locais = JPA.em().createQuery("from CpComplexo")
 				.getResultList();
-		
+
 		Map<SrAcao, List<SrTarefa>> acoesEAtendentes = solicitacao.getAcoesEAtendentes();
 		render("@editar", solicitacao, locais, acoesEAtendentes);
 	}
@@ -283,7 +283,7 @@ public class Application extends SigaApplication {
 			validation.current().addError("solicitacao.descrSolicitacao",
 					"Descri&ccedil&atilde;o n&atilde;o informada");
 		}
-		
+
 		HashMap<Long, Boolean> obrigatorio = solicitacao.getObrigatoriedadeTiposAtributoAssociados();
 		for (SrAtributoSolicitacao att : solicitacao.getAtributoSolicitacaoSet()) {
 			// Para evitar NullPointerExcetpion quando nao encontrar no Map
@@ -309,22 +309,22 @@ public class Application extends SigaApplication {
 		if (validation.current().hasErrors()) {
 			enviarErroValidacao();
 		}
-		
+
 	}
 
 	@SuppressWarnings("static-access")
 	private static void validarFormEditarAcao(SrAcao acao) {
-		if (acao.siglaAcao.equals("")) {
+		if (acao.getSiglaAcao().equals("")) {
 			validation.current().addError("siglaAcao", "Código não informado");
 		}
-		if (acao.tituloAcao.equals("")) {
+		if (acao.getTituloAcao().equals("")) {
 			validation.current().addError("tituloAcao", "Titulo não informado");
 		}
 		if (validation.current().hasErrors()) {
 			enviarErroValidacao();
 		}
 	}
-	
+
 	private static void validarFormEditarTipoAcao(SrTipoAcao acao) {
 		if (acao.siglaTipoAcao.equals("")) {
 			Validation.addError("siglaAcao", "CÃ³digo nÃ£o informado");
@@ -336,11 +336,11 @@ public class Application extends SigaApplication {
 			enviarErroValidacao();
 		}
 	}
-	
-	
+
+
 	private static void enviarErroValidacao() {
 		JsonArray jsonArray = new JsonArray();
-		
+
 		List<Error> errors = Validation.errors();
 		for (Error error : errors) {
 			jsonArray.add(new Gson().toJsonTree(error));
@@ -351,7 +351,7 @@ public class Application extends SigaApplication {
 	@SuppressWarnings("static-access")
 	private static void validarFormEditarDesignacao(SrConfiguracao designacao) throws Exception {
 		StringBuffer sb = new StringBuffer();
-		
+
 		if (designacao.getDescrConfiguracao() == null || designacao.getDescrConfiguracao().isEmpty())
 			validation.current().addError("designacao.descrConfiguracao", "Descrição não informada");
 
@@ -372,33 +372,33 @@ public class Application extends SigaApplication {
 
         if(!solicitacao.isRascunho())
         	validarFormEditar(solicitacao);
-        
-		solicitacao.salvar(cadastrante(), cadastrante().getLotacao(), 
+
+		solicitacao.salvar(cadastrante(), cadastrante().getLotacao(),
 				titular(), lotaTitular());
 		Long id = solicitacao.idSolicitacao;
 		exibir(id, todoOContexto(), ocultas());
 	}
-	
+
 	public static void juntar(Long idSolicitacaoAJuntar, Long idSolicitacaoRecebeJuntada, String justificativa) throws Exception {
 		SrSolicitacao sol = SrSolicitacao.findById(idSolicitacaoAJuntar);
 		SrSolicitacao solRecebeJuntada = SrSolicitacao.findById(idSolicitacaoRecebeJuntada);
 		sol.juntar(cadastrante(), cadastrante().getLotacao(), titular(), lotaTitular(), solRecebeJuntada, justificativa);
 		exibir(idSolicitacaoAJuntar, todoOContexto(), ocultas());
 	}
-	
+
     public static void vincular(Long idSolicitacaoAVincular, Long idSolicitacaoRecebeVinculo, String justificativa) throws Exception {
         SrSolicitacao sol = SrSolicitacao.findById(idSolicitacaoAVincular);
         SrSolicitacao solRecebeVinculo = SrSolicitacao.findById(idSolicitacaoRecebeVinculo);
         sol.vincular(cadastrante(), cadastrante().getLotacao(), titular(), lotaTitular(), solRecebeVinculo, justificativa);
         exibir(idSolicitacaoAVincular, todoOContexto(), ocultas());
     }
-    
+
     public static void desentranhar(Long id, String justificativa) throws Exception {
 		SrSolicitacao sol = SrSolicitacao.findById(id);
 		sol.desentranhar(cadastrante(), cadastrante().getLotacao(), titular(), lotaTitular(), justificativa);
 		exibir(id, todoOContexto(), ocultas());
 	}
-	
+
 	public static void estatistica() throws Exception {
 		assertAcesso("REL:Relatorios");
 		List<SrSolicitacao> lista = SrSolicitacao.all().fetch();
@@ -569,10 +569,10 @@ public class Application extends SigaApplication {
 			throw new Exception("Solicitação não encontrada");
 		else
 			solicitacao = solicitacao.getSolicitacaoAtual();
-		
+
 		if (solicitacao == null)
 			throw new Exception("Esta solicitação foi excluída");
-		
+
 		SrMovimentacao movimentacao = new SrMovimentacao(solicitacao);
 
 		if (todoOContexto == null)
@@ -581,7 +581,7 @@ public class Application extends SigaApplication {
 			//todoOContexto = solicitacao.solicitacaoPai == null ? true : false;
 		if (ocultas == null)
 			ocultas = false;
-	
+
 		Set<SrMovimentacao> movs = solicitacao.getMovimentacaoSet(ocultas,null, false, todoOContexto, !ocultas, false);
 		render(solicitacao, movimentacao, todoOContexto, ocultas, movs);
 	}
@@ -598,11 +598,11 @@ public class Application extends SigaApplication {
 		filtro.idListaPrioridade = id;
 		lista = lista.getListaAtual();
 		String jsonPrioridades = SrPrioridade.getJSON().toString();
-		
+
 		if (!lista.podeConsultar(lotaTitular(), cadastrante())) {
 			throw new Exception("Exibição não permitida");
 		}
-		
+
 		try {
 			solicitacaoListaVO = SrSolicitacaoListaVO.fromFiltro(filtro, true, "", false, lotaTitular(), cadastrante());
 		}
@@ -610,10 +610,10 @@ public class Application extends SigaApplication {
 			e.printStackTrace();
 			solicitacaoListaVO = new SrSolicitacaoListaVO();
 		}
-		
+
 		render(lista, orgaos, locais, tiposPermissao, solicitacaoListaVO, tiposPermissaoJson, jsonPrioridades);
 	}
-	
+
 	public static void incluirEmLista(Long idSolicitacao) throws Exception {
 		SrSolicitacao solicitacao = SrSolicitacao.findById(idSolicitacao);
 		solicitacao = solicitacao.getSolicitacaoAtual();
@@ -638,7 +638,7 @@ public class Application extends SigaApplication {
 			solicitacao.retirarDeLista(lista, cadastrante(), cadastrante().getLotacao(), titular(), lotaTitular());
 			exibirLista(idLista);
 	}
-	
+
 	public static void priorizarLista(List <AtualizacaoLista> listaPrioridadeSolicitacao, Long id) throws Exception {
 		SrLista lista = SrLista.findById(id);
 		lista.priorizar(cadastrante(), lotaTitular(), listaPrioridadeSolicitacao);
@@ -651,11 +651,11 @@ public class Application extends SigaApplication {
 		sel = (SrSolicitacao) sel.selecionar(sigla);
 		render("@selecionar", sel);
 	}
-	
+
 	//	DB1: foi necessário receber e passar o parametro "nome"(igual ao buscarItem())
 	//	para chamar a function javascript correta,
 	//	e o parametro "popup" porque este metodo é usado também na lista,
-	//	e não foi possível deixar default no template(igual ao buscarItem.html) 
+	//	e não foi possível deixar default no template(igual ao buscarItem.html)
 	@SuppressWarnings("unchecked")
 
 	public static void buscarSolicitacao(SrSolicitacaoFiltro filtro, String nome, boolean popup) {
@@ -671,7 +671,7 @@ public class Application extends SigaApplication {
 			e.printStackTrace();
 			solicitacaoListaVO = new SrSolicitacaoListaVO();
 		}
-		
+
 		// Montando o filtro...
 		String[] tipos = new String[] { "Pessoa", "Lotação" };
 		List<CpMarcador> marcadores = JPA.em()
@@ -682,7 +682,7 @@ public class Application extends SigaApplication {
 		List<SrLista> listasPrioridade = SrLista.listar(false);
 		render(solicitacaoListaVO, tipos, marcadores, filtro, nome, popup, atributosDisponiveisAdicao, listasPrioridade);
 	}
-	
+
 	public static void baixar(Long idArquivo) {
 		SrArquivo arq = SrArquivo.findById(idArquivo);
 		if (arq != null)
@@ -714,7 +714,7 @@ public class Application extends SigaApplication {
 		sol.excluir();
 		editar(null);
 	}
-	
+
 	public static void responderPesquisa(Long id) throws Exception {
 		/*SrSolicitacao sol = SrSolicitacao.findById(id);
 		SrPesquisa pesquisa = sol.getPesquisaDesignada();
@@ -724,7 +724,7 @@ public class Application extends SigaApplication {
 		pesquisa = pesquisa.getPesquisaAtual();
 		render(id, pesquisa);*/
 	}
-	
+
 	public static void responderPesquisaGravar(Long id,
 			Map<Long, String> respostaMap) throws Exception {
 		SrSolicitacao sol = SrSolicitacao.findById(id);
@@ -785,23 +785,23 @@ public class Application extends SigaApplication {
 		Map<SrAcao, List<SrTarefa>> acoesEAtendentes = solicitacao.getAcoesEAtendentes();
 		render(solicitacao, acoesEAtendentes);
 	}
-	
+
 	public static void escalonarGravar(Long id, Long itemConfiguracao,
 				SrAcao acao, Long idAtendente, Long idAtendenteNaoDesignado, Long idDesignacao,
 				SrTipoMotivoEscalonamento motivo, String descricao,
 				Boolean criaFilha, Boolean fechadoAuto) throws Exception {
-		if(itemConfiguracao == null || acao == null || acao.idAcao == null || acao.idAcao.equals(0L))
-			throw new Exception("Operacao nao permitida. Necessario informar um item de configuracao " + 
+		if(itemConfiguracao == null || acao == null || acao.getIdAcao() == null || acao.getIdAcao().equals(0L))
+			throw new Exception("Operacao nao permitida. Necessario informar um item de configuracao " +
 					"e uma acao.");
 		SrSolicitacao solicitacao = SrSolicitacao.findById(id);
-		
+
 		DpLotacao atendenteNaoDesignado = null;
 		DpLotacao atendente = null;
 		if (idAtendente != null)
 			atendente = JPA.em().find(DpLotacao.class, idAtendente);
 		if (idAtendenteNaoDesignado != null)
 			 atendenteNaoDesignado = JPA.em().find(DpLotacao.class, idAtendenteNaoDesignado);
-		
+
 		if (criaFilha) {
 			if (fechadoAuto != null) {
 				solicitacao.setFechadoAutomaticamente(fechadoAuto);
@@ -813,7 +813,7 @@ public class Application extends SigaApplication {
 			else
 				filha = solicitacao.criarFilhaSemSalvar();
 			filha.itemConfiguracao = SrItemConfiguracao.findById(itemConfiguracao);
-			filha.acao = SrAcao.findById(acao.idAcao);
+			filha.acao = SrAcao.AR.findById(acao.getIdAcao());
 			filha.designacao = SrConfiguracao.findById(idDesignacao);
 			filha.descrSolicitacao = descricao;
 			if (idAtendenteNaoDesignado != null)
@@ -826,20 +826,20 @@ public class Application extends SigaApplication {
 			mov.tipoMov = SrTipoMovimentacao
 					.findById(SrTipoMovimentacao.TIPO_MOVIMENTACAO_ESCALONAMENTO);
 			mov.itemConfiguracao = SrItemConfiguracao.findById(itemConfiguracao);
-			mov.acao = SrAcao.findById(acao.idAcao);
+			mov.acao = SrAcao.AR.findById(acao.getIdAcao());
 			mov.lotaAtendente = atendenteNaoDesignado != null ? atendenteNaoDesignado : atendente;
 			if(solicitacao.getAtendente() != null && !mov.lotaAtendente.equivale(solicitacao.getAtendente().getLotacao()))
 				mov.atendente = null;
 			mov.motivoEscalonamento = motivo;
 			mov.designacao = SrConfiguracao.findById(idDesignacao);
-			mov.descrMovimentacao = "Motivo: " + mov.motivoEscalonamento + "; Item: " + mov.itemConfiguracao.tituloItemConfiguracao 
-					+ "; Ação: " + mov.acao.tituloAcao + "; Atendente: " + mov.lotaAtendente.getSigla();
+			mov.descrMovimentacao = "Motivo: " + mov.motivoEscalonamento + "; Item: " + mov.itemConfiguracao.tituloItemConfiguracao
+					+ "; Ação: " + mov.acao.getTituloAcao() + "; Atendente: " + mov.lotaAtendente.getSigla();
 			mov.salvar(cadastrante(), cadastrante().getLotacao(), titular(), lotaTitular());
 			exibir(solicitacao.idSolicitacao, todoOContexto(), ocultas());
 		}
-			
+
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static void listarDesignacao(boolean mostrarDesativados) throws Exception {
 		assertAcesso("ADM:Administrar");
@@ -851,10 +851,10 @@ public class Application extends SigaApplication {
 
 		List<SrPesquisa> pesquisaSatisfacao = SrPesquisa.find(
 				"hisDtFim is null").fetch();
-		
+
 		render(designacoes, orgaos, locais, pesquisaSatisfacao);
 	}
-	
+
 	public static void listarDesignacaoDesativados() throws Exception {
 		listarDesignacao(Boolean.TRUE);
 	}
@@ -866,23 +866,23 @@ public class Application extends SigaApplication {
 		designacao.refresh();
 		return designacao.getSrConfiguracaoJson();
 	}
-	
+
 	public static String gravarDesignacaoItem(SrConfiguracao designacao, Long idItemConfiguracao) throws Exception {
 		assertAcesso("ADM:Administrar");
 		designacao.salvarComoDesignacao();
 		designacao.refresh();
-		
+
 		SrItemConfiguracao itemConfiguracao = SrItemConfiguracao.findById(idItemConfiguracao);
 		itemConfiguracao.adicionarDesignacao(designacao);
 		return designacao.getSrConfiguracaoJson(itemConfiguracao);
 	}
-	
-	
+
+
 	public static String desativarDesignacao(Long id, boolean mostrarDesativados) throws Exception {
 		assertAcesso("ADM:Administrar");
 		SrConfiguracao designacao = JPA.em().find(SrConfiguracao.class, id);
 		designacao.finalizar();
-		
+
 		return designacao.getSrConfiguracaoJson();
 	}
 
@@ -893,19 +893,19 @@ public class Application extends SigaApplication {
 		List<SrConfiguracao> abrangencias = SrConfiguracao.listarAbrangenciasAcordo(Boolean.FALSE, acordo);
 		return SrConfiguracao.convertToJSon(abrangencias);
 	}
-	
+
 	public static String buscarAbrangenciasAcordoDesativados(Long id) throws Exception {
 		SrAcordo acordo = new SrAcordo();
 		if (id != null)
 			acordo = SrAcordo.findById(id);
 		List<SrConfiguracao> abrangencias = SrConfiguracao.listarAbrangenciasAcordo(Boolean.TRUE, acordo);
 		return SrConfiguracao.convertToJSon(abrangencias);
-	}	
+	}
 
 	public static String gravarAcordo(SrAcordo acordo) throws Exception {
 		assertAcesso("ADM:Administrar");
 		acordo.salvar();
-		
+
 		return acordo.toJson();
 	}
 
@@ -913,25 +913,25 @@ public class Application extends SigaApplication {
 		assertAcesso("ADM:Administrar");
 		SrAcordo acordo = SrAcordo.findById(id);
 		acordo.finalizar();
-		
+
 		return acordo.toJson();
 	}
-	
+
 	public static String reativarAcordo(Long id, boolean mostrarDesativados) throws Exception {
 		assertAcesso("ADM:Administrar");
 		SrAcordo acordo = SrAcordo.findById(id);
 		acordo.salvar();
-		
+
 		return acordo.toJson();
 	}
-	
+
 	public static String gravarAbrangencia(SrConfiguracao associacao) throws Exception {
 		assertAcesso("ADM:Administrar");
 		associacao.salvarComoAbrangenciaAcordo();
 		associacao.refresh();
-		return associacao.getSrConfiguracaoJson();		
+		return associacao.getSrConfiguracaoJson();
 	}
-	
+
 	public static void desativarAbrangenciaEdicao(Long idAcordo, Long idAssociacao) throws Exception {
 		assertAcesso("ADM:Administrar");
 		SrConfiguracao abrangencia = JPA.em().find(SrConfiguracao.class, idAssociacao);
@@ -948,10 +948,10 @@ public class Application extends SigaApplication {
 		assertAcesso("ADM:Administrar");
 		SrConfiguracao designacao = JPA.em().find(SrConfiguracao.class, id);
 		designacao.salvar();
-		
+
 		return designacao.getSrConfiguracaoJson();
 	}
-	
+
 	public static void selecionarAcordo(String sigla)
 			throws Exception {
 		SrAcordo sel = new SrAcordo().selecionar(sigla);
@@ -961,7 +961,7 @@ public class Application extends SigaApplication {
 	@SuppressWarnings("unchecked")
 	public static void buscarAcordo(String nome, boolean popup, boolean mostrarDesativados) throws Exception {
 		assertAcesso("ADM:Administrar");
-		
+
 		List<SrAtributo> parametros = SrAtributo.listarParaAcordo(false);
 		List<CpUnidadeMedida> unidadesMedida = CpDao.getInstance().listarUnidadesMedida();
 		List<CpOrgaoUsuario> orgaos = JPA.em()
@@ -970,11 +970,11 @@ public class Application extends SigaApplication {
 		List<SrAcordo> acordos = SrAcordo.listar(mostrarDesativados);
 		render(acordos, nome, popup, mostrarDesativados, parametros, unidadesMedida, orgaos, locais);
 	}
-	
+
 	public static void buscarAcordoDesativadas() throws Exception {
 		buscarAcordo(null, false, true);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static void editarPermissaoUsoLista(Long id) throws Exception {
 		assertAcesso("ADM:Administrar");
@@ -996,17 +996,17 @@ public class Application extends SigaApplication {
         List<SrConfiguracao> associacoes = SrConfiguracao.listarPermissoesUsoLista(lista, Boolean.TRUE);
         return SrConfiguracao.convertToJSon(associacoes);
     }
-    
+
     public static String listarPermissaoUsoLista(Long idLista) throws Exception {
         assertAcesso("ADM:Administrar");
-        
+
         SrLista lista = new SrLista();
         if (idLista != null)
         	lista = SrLista.findById(idLista);
         List<SrConfiguracao> associacoes = SrConfiguracao.listarPermissoesUsoLista(lista, Boolean.FALSE);
         return SrConfiguracao.convertToJSon(associacoes);
-    }       
-	
+    }
+
 	public static String gravarPermissaoUsoLista(SrConfiguracao permissao) throws Exception {
 		assertAcesso("ADM:Administrar");
 		validarFormEditarPermissaoUsoLista(permissao);
@@ -1020,12 +1020,12 @@ public class Application extends SigaApplication {
 		SrConfiguracao designacao = JPA.em().find(SrConfiguracao.class, id);
 		designacao.finalizar();
 	}
-	
+
 	public static String desativarPermissaoUsoListaEdicao(Long idLista, Long idPermissao) throws Exception {
 		assertAcesso("ADM:Administrar");
 		SrConfiguracao configuracao = JPA.em().find(SrConfiguracao.class, idPermissao);
 		configuracao.finalizar();
-		
+
 		return configuracao.getSrConfiguracaoJson();
 	}
 
@@ -1035,20 +1035,20 @@ public class Application extends SigaApplication {
 		associacao.refresh();
 		return associacao.toVO().toJson();
 	}
-	
+
 	public static String gravarAssociacaoPesquisa(SrConfiguracao associacao) throws Exception {
 		assertAcesso("ADM:Administrar");
 		associacao.salvarComoAssociacaoPesquisa();
 		associacao.refresh();
 		return associacao.toVO().toJson();
 	}
-	
+
 	public static void desativarAssociacaoEdicao(Long idAtributo, Long idAssociacao) throws Exception {
 		assertAcesso("ADM:Administrar");
 		SrConfiguracao associacao = JPA.em().find(SrConfiguracao.class, idAssociacao);
 		associacao.finalizar();
 	}
-	
+
 	public static void desativarAssociacaoPesquisaEdicao(Long idPesquisa, Long idAssociacao) throws Exception {
 		assertAcesso("ADM:Administrar");
 		SrConfiguracao associacao = JPA.em().find(SrConfiguracao.class, idAssociacao);
@@ -1071,7 +1071,7 @@ public class Application extends SigaApplication {
 	public static void listarItem(boolean mostrarDesativados) throws Exception {
 		assertAcesso("ADM:Administrar");
 		List<SrItemConfiguracao> itens = SrItemConfiguracao.listar(mostrarDesativados);
-		
+
 		List<CpOrgaoUsuario> orgaos = JPA.em()
 				.createQuery("from CpOrgaoUsuario").getResultList();
 		List<CpComplexo> locais = CpComplexo.all().fetch();
@@ -1079,17 +1079,17 @@ public class Application extends SigaApplication {
 				.listarUnidadesMedida();
 		List<SrPesquisa> pesquisaSatisfacao = SrPesquisa.find(
 				"hisDtFim is null").fetch();
-		
+
 		render(itens, mostrarDesativados, orgaos, locais, unidadesMedida, pesquisaSatisfacao);
 	}
-	
+
 	public static void listarItemDesativados() throws Exception {
 		listarItem(Boolean.TRUE);
 	}
 
 	public static String buscarDesignacoesItem(Long id) throws Exception {
 		List<SrConfiguracao> designacoes;
-		
+
 		if (id != null) {
 			SrItemConfiguracao itemConfiguracao = SrItemConfiguracao.findById(id);
 			designacoes = new ArrayList<SrConfiguracao>(itemConfiguracao.getDesignacoesAtivas());
@@ -1097,44 +1097,44 @@ public class Application extends SigaApplication {
 		}
 		else
 			designacoes = new ArrayList<SrConfiguracao>();
-		
+
 		return SrConfiguracao.convertToJSon(designacoes);
 	}
-	
+
 	public static String buscarDesignacoesEquipe(Long id) throws Exception {
 		List<SrConfiguracao> designacoes;
-		
+
 		if (id != null) {
 			SrEquipe equipe = SrEquipe.findById(id);
 			designacoes = new ArrayList<SrConfiguracao>(equipe.getDesignacoes());
 		}
 		else
 			designacoes = new ArrayList<SrConfiguracao>();
-		
+
 		return SrConfiguracao.convertToJSon(designacoes);
 	}
-	
+
 	/**
 	 * Recupera as {@link SrConfiguracao permissoes} de uma {@link SrLista lista}.
-	 * 
+	 *
 	 * @param idObjetivo - ID da lista
 	 * @return - String contendo a lista no formato jSon
 	 */
 	public static String buscarPermissoesLista(Long idLista) throws Exception {
 		List<SrConfiguracao> permissoes;
-		
+
 		if (idLista != null) {
 			SrLista lista = SrLista.findById(idLista);
-			
+
 			//permissoes = new ArrayList<SrConfiguracao>(lista.getPermissoes(lotaTitular(), cadastrante()));
 			permissoes = SrConfiguracao.listarPermissoesUsoLista(lista, false);
 		}
 		else
 			permissoes = new ArrayList<SrConfiguracao>();
-		
+
 		return SrConfiguracao.convertToJSon(permissoes);
 	}
-	
+
 
 	public static String gravarItem(SrItemConfiguracao itemConfiguracao)
 			throws Exception {
@@ -1169,7 +1169,7 @@ public class Application extends SigaApplication {
 //					+ " salvo, mas nao foi possivel atualizar conhecimento");
 //			e.printStackTrace();
 //		}
-//		
+//
 		itemConfiguracao.refresh();
 		return itemConfiguracao.getSrItemConfiguracaoJson();
 	}
@@ -1178,10 +1178,10 @@ public class Application extends SigaApplication {
 		assertAcesso("ADM:Administrar");
 		SrItemConfiguracao item = SrItemConfiguracao.findById(id);
 		item.finalizar();
-		
+
 		return item.getSrItemConfiguracaoJson();
 	}
-	
+
 	public static String reativarItem(Long id, boolean mostrarDesativados) throws Exception {
 		assertAcesso("ADM:Administrar");
 		SrItemConfiguracao item = SrItemConfiguracao.findById(id);
@@ -1215,19 +1215,19 @@ public class Application extends SigaApplication {
 
 		render(itens, filtro, nome, sol);
 	}
-	
+
 	public static String buscarAssociacaoPesquisa(Long idPesquisa) {
 		SrPesquisa pesq = SrPesquisa.findById(idPesquisa);
-		
+
 		if (pesq != null)
 			return pesq.toJson(true);
 		else
 			return "";
 	}
-	
+
 	public static String buscarAssociacaoAtributo(Long idAtributo) {
 		SrAtributo attr = SrAtributo.findById(idAtributo);
-		
+
 		if (attr != null)
 			return attr.toJson(true);
 		else
@@ -1237,7 +1237,7 @@ public class Application extends SigaApplication {
 	public static void listarAtributoDesativados() throws Exception {
 		listarAtributo(Boolean.TRUE);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static void listarAtributo(boolean mostrarDesativados) throws Exception {
 		assertAcesso("ADM:Administrar");
@@ -1273,17 +1273,17 @@ public class Application extends SigaApplication {
         List<SrConfiguracao> associacoes = SrConfiguracao.listarAssociacoesAtributo(att, Boolean.TRUE);
         return SrConfiguracao.convertToJSon(associacoes);
     }
-    
+
     public static String listarAssociacaoAtributo(Long idAtributo) throws Exception {
         assertAcesso("ADM:Administrar");
-        
+
     	SrAtributo att = new SrAtributo();
     	if (idAtributo != null)
     		att = SrAtributo.findById(idAtributo);
         List<SrConfiguracao> associacoes = SrConfiguracao.listarAssociacoesAtributo(att, Boolean.FALSE);
         return SrConfiguracao.convertToJSon(associacoes);
-    }   	
-	
+    }
+
 	public static String gravarAtributo(SrAtributo atributo) throws Exception {
 		assertAcesso("ADM:Administrar");
 		validarFormEditarAtributo(atributo);
@@ -1293,12 +1293,12 @@ public class Application extends SigaApplication {
 
 	@SuppressWarnings("static-access")
 	private static void validarFormEditarAtributo(SrAtributo atributo) {
-		if (atributo.tipoAtributo == SrTipoAtributo.VL_PRE_DEFINIDO 
+		if (atributo.tipoAtributo == SrTipoAtributo.VL_PRE_DEFINIDO
 				&& atributo.descrPreDefinido.equals("")) {
 			validation.current().addError("att.descrPreDefinido",
 					"Valores Pré-definido não informados");
 		}
-		
+
 		if (validation.current().hasErrors()) {
 			enviarErroValidacao();
 		}
@@ -1308,7 +1308,7 @@ public class Application extends SigaApplication {
 		assertAcesso("ADM:Administrar");
 		SrAtributo item = SrAtributo.findById(id);
 		item.finalizar();
-		
+
 		return item.toJson(false);
 	}
 
@@ -1329,7 +1329,7 @@ public class Application extends SigaApplication {
 		List<CpComplexo> locais = CpComplexo.all().fetch();
 		render(pesquisas, tipos, orgaos, locais);
 	}
-	
+
 	public static void listarPesquisaDesativadas() throws Exception {
 		listarPesquisa(Boolean.TRUE);
 	}
@@ -1342,7 +1342,7 @@ public class Application extends SigaApplication {
 		List<SrTipoPergunta> tipos = SrTipoPergunta.all().fetch();
 		render(pesq, tipos);
 	}
-	
+
     public static String listarAssociacaoPesquisaDesativados(Long idPesquisa) throws Exception {
     	SrPesquisa pesquisa = new SrPesquisa();
     	if (idPesquisa != null)
@@ -1350,25 +1350,25 @@ public class Application extends SigaApplication {
         List<SrConfiguracao> associacoes = SrConfiguracao.listarAssociacoesPesquisa(pesquisa, Boolean.TRUE);
         return SrConfiguracao.convertToJSon(associacoes);
     }
-    
+
     public static String listarAssociacaoPesquisa(Long idPesquisa) throws Exception {
         assertAcesso("ADM:Administrar");
-        
+
     	SrPesquisa pesquisa = new SrPesquisa();
     	if (idPesquisa != null)
     		pesquisa = SrPesquisa.findById(idPesquisa);
-        
+
         List<SrConfiguracao> associacoes = SrConfiguracao.listarAssociacoesPesquisa(pesquisa, Boolean.FALSE);
         return SrConfiguracao.convertToJSon(associacoes);
-    }       
-	
+    }
+
 
 	public static String gravarPesquisa(SrPesquisa pesquisa, Set<SrPergunta> perguntaSet) throws Exception {
 		assertAcesso("ADM:Administrar");
 		pesquisa = (SrPesquisa) Objeto.getImplementation(pesquisa);
 		pesquisa.perguntaSet = (perguntaSet != null) ? perguntaSet : new HashSet<SrPergunta>();
 		pesquisa.salvar();
-		
+
 		return pesquisa.atualizarTiposPerguntas().toJson();
 	}
 
@@ -1376,48 +1376,48 @@ public class Application extends SigaApplication {
 		assertAcesso("ADM:Administrar");
 		SrPesquisa pesq = SrPesquisa.findById(id);
 		pesq.finalizar();
-		
+
 		return pesq.toJson();
 	}
-	
+
 	public static String reativarPesquisa(Long id, boolean mostrarDesativados) throws Exception {
 		assertAcesso("ADM:Administrar");
 		SrPesquisa pesq = SrPesquisa.findById(id);
 		pesq.salvar();
-		
+
 		return pesq.toJson();
 	}
-	
+
 	public static void listarConhecimento(Long idItem, Long idAcao, boolean ajax) throws Exception {
 		assertAcesso("EDTCONH:Criar Conhecimentos");
 		SrItemConfiguracao item = idItem != null ? (SrItemConfiguracao)SrItemConfiguracao.findById(idItem) : null;
-		SrAcao acao = idAcao != null ? (SrAcao)SrAcao.findById(idAcao) : null;			
+		SrAcao acao = idAcao != null ? (SrAcao)SrAcao.AR.findById(idAcao) : null;
 		render("@listarConhecimento" + (ajax ? "Ajax" : ""), item, acao);
 	}
-	
+
 	public static void listarDisponibilidadeItens() {
 		render();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static String listarPaginaDisponibilidade(PaginaItemConfiguracao pagina) {
 		List<CpOrgaoUsuario> orgaos = JPA.em().createQuery("from CpOrgaoUsuario").getResultList();
-		
+
 		return pagina
 				.atualizar(orgaos)
 				.toJson();
 	}
-	
+
 	public static String gravarDisponibilidade(SrDisponibilidade disponibilidade, PaginaItemConfiguracao pagina) throws Exception {
 		disponibilidade.salvar(pagina);
 		return disponibilidade.toJsonObject().toString();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static void listarEquipe(boolean mostrarDesativados) throws Exception {
 		assertAcesso("ADM:Administrar");
 		List<SrEquipe> listaEquipe = SrEquipe.listar(mostrarDesativados);
-		
+
 		List<CpOrgaoUsuario> orgaos = JPA.em()
 				.createQuery("from CpOrgaoUsuario").getResultList();
 		List<CpComplexo> locais = CpComplexo.all().fetch();
@@ -1426,22 +1426,22 @@ public class Application extends SigaApplication {
 		List<SrPesquisa> pesquisaSatisfacao = SrPesquisa.find(
 				"hisDtFim is null").fetch();
 		SelecionavelVO lotacaoUsuario = SelecionavelVO.createFrom(lotaTitular());
-		
+
 		render(listaEquipe, orgaos, locais, unidadesMedida, pesquisaSatisfacao, lotacaoUsuario);
 	}
-	
+
 	public static String gravarEquipe(SrEquipe equipe) throws Exception {
 		assertAcesso("ADM:Administrar");
 		equipe.salvar();
 		return equipe.toJson();
 	}
-	
+
 	public static void listarAcao(boolean mostrarDesativados) throws Exception {
 		assertAcesso("ADM:Administrar");
 		List<SrAcao> acoes = SrAcao.listar(mostrarDesativados);
 		render(acoes, mostrarDesativados);
 	}
-	
+
 	public static void listarAcaoDesativados() throws Exception {
 		listarAcao(Boolean.TRUE);
 	}
@@ -1450,7 +1450,7 @@ public class Application extends SigaApplication {
 		assertAcesso("ADM:Administrar");
 		SrAcao acao = new SrAcao();
 		if (id != null)
-			acao = SrAcao.findById(id);
+			acao = SrAcao.AR.findById(id);
 		render(acao);
 	}
 
@@ -1458,19 +1458,19 @@ public class Application extends SigaApplication {
 		assertAcesso("ADM:Administrar");
 		validarFormEditarAcao(acao);
 		acao.salvar();
-		
-		// Atualiza os conhecimentos relacionados. 
+
+		// Atualiza os conhecimentos relacionados.
 		// Edson: deveria ser feito por webservice. Nao estah sendo coberta
 		// a atualizacao da classificacao quando ocorre mudanca de posicao na
 		// hierarquia, pois isso eh mais complexo de acertar.
-		
-		// Karina: Comentado pois precisa ser refatorado devido ao uso do ConexaoHTTP que está deprecated 
+
+		// Karina: Comentado pois precisa ser refatorado devido ao uso do ConexaoHTTP que está deprecated
 //		try {
 //			HashMap<String, String> atributos = new HashMap<String, String>();
 //			for (Http.Header h : request.headers.values())
 //				if (!h.name.equals("content-type"))
 //					atributos.put(h.name, h.value());
-//			
+//
 //			SrAcao anterior = acao
 //					.getHistoricoAcao().get(0);
 //			if (anterior != null
@@ -1491,15 +1491,15 @@ public class Application extends SigaApplication {
 
 	public static String desativarAcao(Long id, boolean mostrarDesativados) throws Exception {
 		assertAcesso("ADM:Administrar");
-		SrAcao acao = SrAcao.findById(id);
+		SrAcao acao = SrAcao.AR.findById(id);
 		acao.finalizar();
-		
+
 		return acao.toJson();
 	}
-	
+
 	public static String reativarAcao(Long id, boolean mostrarDesativados) throws Exception {
 		assertAcesso("ADM:Administrar");
-		SrAcao acao = SrAcao.findById(id);
+		SrAcao acao = SrAcao.AR.findById(id);
 		acao.salvar();
 		return acao.toJson();
 	}
@@ -1529,13 +1529,13 @@ public class Application extends SigaApplication {
 
 		render(itens, filtro, nome, sol);
 	}
-	
+
 	public static void listarTipoAcao(boolean mostrarDesativados) throws Exception {
 		assertAcesso("ADM:Administrar");
 		List<SrTipoAcao> tiposAcao = SrTipoAcao.listar(mostrarDesativados);
 		render(tiposAcao, mostrarDesativados);
 	}
-	
+
 	public static void listarTipoAcaoDesativados() throws Exception {
 		listarTipoAcao(Boolean.TRUE);
 	}
@@ -1560,7 +1560,7 @@ public class Application extends SigaApplication {
 		SrTipoAcao tipoAcao = SrTipoAcao.findById(id);
 		tipoAcao.finalizar();
 	}
-	
+
 	public static Long reativarTipoAcao(Long id, boolean mostrarDesativados) throws Exception {
 		assertAcesso("ADM:Administrar");
 		SrTipoAcao tipoAcao = SrTipoAcao.findById(id);
@@ -1610,10 +1610,10 @@ public class Application extends SigaApplication {
 		List<SrTipoPermissaoLista> tiposPermissao = SrTipoPermissaoLista.all().fetch();
 		List<SrLista> listas = SrLista.listar(mostrarDesativados);
 		String tiposPermissaoJson = new Gson().toJson(tiposPermissao);
-		
+
 		render(listas, mostrarDesativados, orgaos, locais, tiposPermissao, tiposPermissaoJson);
 	}
-	
+
 	public static void listarListaDesativados() throws Exception {
 		listarLista(Boolean.TRUE);
 	}
@@ -1624,13 +1624,13 @@ public class Application extends SigaApplication {
 		lista.salvar();
 		return lista.toJson();
 	}
-	
+
 	private static void validarFormEditarLista(SrLista lista) {
 		if (lista.nomeLista == null || lista.nomeLista.trim().equals("")) {
 			Validation.addError("lista.nomeLista",
 					"Nome da Lista nÃ£o informados");
 		}
-		
+
 		if (Validation.hasErrors()) {
 			enviarErroValidacao();
 		}
@@ -1639,21 +1639,21 @@ public class Application extends SigaApplication {
 	public static String desativarLista(Long id, boolean mostrarDesativados) throws Exception {
 		SrLista lista = SrLista.findById(id);
 		lista.finalizar();
-		
+
 		return lista.toJson();
 	}
-	
+
 	public static String reativarLista(Long id, boolean mostrarDesativados) throws Exception {
 		SrLista lista = SrLista.findById(id);
 		lista.salvar();
 		return lista.toJson();
 	}
-	
+
 	public static void exibirPrioridade(SrSolicitacao solicitacao) {
 		solicitacao.associarPrioridadePeloGUT();
 		render(solicitacao);
 	}
-	
+
 	public static void atualizarFechamentoAutomatico() throws Exception {
 		List<SrSolicitacao> todasSolicitacoes = SrSolicitacao.findAll();
 		for (SrSolicitacao sol : todasSolicitacoes) {
@@ -1664,25 +1664,25 @@ public class Application extends SigaApplication {
 		}
 		renderText("AtualizaÃ§Ã£o realizada com sucesso");
 	}
-	
+
 	public static String configuracoesParaInclusaoAutomatica(Long idLista, boolean mostrarDesativados) throws Exception {
 		SrLista lista = SrLista.findById(idLista);
 		return SrConfiguracao.buscaParaConfiguracaoInsercaoAutomaticaListaJSON(lista.getListaAtual(), mostrarDesativados);
 	}
-	
+
 	public static String configuracaoAutomaticaGravar(SrConfiguracao configuracaoInclusaoAutomatica) throws Exception {
-		configuracaoInclusaoAutomatica.salvarComoInclusaoAutomaticaLista(configuracaoInclusaoAutomatica.listaPrioridade); 
+		configuracaoInclusaoAutomatica.salvarComoInclusaoAutomaticaLista(configuracaoInclusaoAutomatica.listaPrioridade);
 		configuracaoInclusaoAutomatica.refresh();
 		return configuracaoInclusaoAutomatica.toVO().toJson();
 	}
-	
-	
+
+
 	public static String desativarConfiguracaoAutomaticaGravar(Long id) throws Exception {
 		SrConfiguracao configuracao = JPA.em().find(SrConfiguracao.class, id);
 		configuracao.finalizar();
 		return configuracao.toVO().toJson();
 	}
-	
+
 	public static String reativarConfiguracaoAutomaticaGravar(Long id) throws Exception {
 		SrConfiguracao configuracao = JPA.em().find(SrConfiguracao.class, id);
 		configuracao.salvar();
