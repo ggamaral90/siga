@@ -34,42 +34,42 @@ import com.google.gson.GsonBuilder;
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class SrAcao extends HistoricoSuporte implements SrSelecionavel, Comparable<SrAcao> {
 	private static final long serialVersionUID = 8387408543308440033L;
-	
+
 	public static ActiveRecord<SrAcao> AR = new ActiveRecord<>(SrAcao.class);
 
 	@Id
 	@SequenceGenerator(sequenceName = "SIGASR.SR_ACAO_SEQ", name = "srAcaoSeq")
 	@GeneratedValue(generator = "srAcaoSeq")
 	@Column(name = "ID_ACAO")
-	public Long idAcao;
+	private Long idAcao;
 
 	@Column(name = "SIGLA_ACAO")
-	public String siglaAcao;
+	private String siglaAcao;
 
 	@Column(name = "DESCR_ACAO")
-	public String descrAcao;
+	private String descrAcao;
 
 	@Column(name = "TITULO_ACAO")
-	public String tituloAcao;
+	private String tituloAcao;
 
 	@ManyToOne()
 	@JoinColumn(name = "HIS_ID_INI", insertable = false, updatable = false)
-	public SrAcao acaoInicial;
-	
+	private SrAcao acaoInicial;
+
 	@ManyToOne
 	@JoinColumn(name = "TIPO_ACAO")
-	public SrTipoAcao tipoAcao;
+	private SrTipoAcao tipoAcao;
 
 	@OneToMany(targetEntity = SrAcao.class, mappedBy = "acaoInicial", fetch = FetchType.LAZY)
 	@OrderBy("hisDtIni desc")
-	public List<SrAcao> meuAcaoHistoricoSet;
+	private List<SrAcao> meuAcaoHistoricoSet;
 
 	@ManyToOne()
 	@JoinColumn(name = "ID_PAI")
-	public SrAcao pai;
+	private SrAcao pai;
 
 	@OneToMany(targetEntity = SrAcao.class, mappedBy = "pai", fetch = FetchType.LAZY)
-	public List<SrAcao> filhoSet;
+	private List<SrAcao> filhoSet;
 
 	public SrAcao() {
 		this(null, null);
@@ -230,7 +230,7 @@ public class SrAcao extends HistoricoSuporte implements SrSelecionavel, Comparab
 		for (int i = 0; i < 2 - (getNivel() - 1); i++) {
 			sigla += ".00";
 		}
-		return SrAcao.find("byHisDtFimIsNullAndSiglaAcao", sigla).first();
+		return SrAcao.AR.find("byHisDtFimIsNullAndSiglaAcao", sigla).first();
 	}
 
 	public boolean isPaiDeOuIgualA(SrAcao outraAcao) {
@@ -251,7 +251,7 @@ public class SrAcao extends HistoricoSuporte implements SrSelecionavel, Comparab
 
 	public static List<SrAcao> listar(boolean mostrarDesativados) {
 		StringBuffer sb = new StringBuffer();
-		
+
 		if (!mostrarDesativados)
 			sb.append(" hisDtFim is null");
 		else {
@@ -259,10 +259,10 @@ public class SrAcao extends HistoricoSuporte implements SrSelecionavel, Comparab
 			sb.append(" SELECT max(idAcao) as idAcao FROM ");
 			sb.append(" SrAcao GROUP BY hisIdIni) ");
 		}
-		
+
 		sb.append(" order by siglaAcao ");
-		
-		return SrAcao.find(sb.toString()).fetch();
+
+		return SrAcao.AR.find(sb.toString()).fetch();
 	}
 
 	@SuppressWarnings("unused")
@@ -295,7 +295,79 @@ public class SrAcao extends HistoricoSuporte implements SrSelecionavel, Comparab
 		}
 		return lista;
 	}
-	
+
+	public Long getIdAcao() {
+		return idAcao;
+	}
+
+	public void setIdAcao(Long idAcao) {
+		this.idAcao = idAcao;
+	}
+
+	public String getSiglaAcao() {
+		return siglaAcao;
+	}
+
+	public void setSiglaAcao(String siglaAcao) {
+		this.siglaAcao = siglaAcao;
+	}
+
+	public String getDescrAcao() {
+		return descrAcao;
+	}
+
+	public void setDescrAcao(String descrAcao) {
+		this.descrAcao = descrAcao;
+	}
+
+	public String getTituloAcao() {
+		return tituloAcao;
+	}
+
+	public void setTituloAcao(String tituloAcao) {
+		this.tituloAcao = tituloAcao;
+	}
+
+	public SrAcao getAcaoInicial() {
+		return acaoInicial;
+	}
+
+	public void setAcaoInicial(SrAcao acaoInicial) {
+		this.acaoInicial = acaoInicial;
+	}
+
+	public SrTipoAcao getTipoAcao() {
+		return tipoAcao;
+	}
+
+	public void setTipoAcao(SrTipoAcao tipoAcao) {
+		this.tipoAcao = tipoAcao;
+	}
+
+	public List<SrAcao> getMeuAcaoHistoricoSet() {
+		return meuAcaoHistoricoSet;
+	}
+
+	public void setMeuAcaoHistoricoSet(List<SrAcao> meuAcaoHistoricoSet) {
+		this.meuAcaoHistoricoSet = meuAcaoHistoricoSet;
+	}
+
+	public SrAcao getPai() {
+		return pai;
+	}
+
+	public void setPai(SrAcao pai) {
+		this.pai = pai;
+	}
+
+	public List<SrAcao> getFilhoSet() {
+		return filhoSet;
+	}
+
+	public void setFilhoSet(List<SrAcao> filhoSet) {
+		this.filhoSet = filhoSet;
+	}
+
 	@Override
 	public String toString() {
 		return siglaAcao + " - " + tituloAcao;
@@ -310,12 +382,12 @@ public class SrAcao extends HistoricoSuporte implements SrSelecionavel, Comparab
 		}
 		return this.descrAcao.compareTo(arg0.descrAcao);
 	}
-	
+
 	/**
 	 * Classe que representa um V.O. de {@link SrAcao}.
 	 */
 	public class SrAcaoVO {
-		
+
 		public Long id;
 		public String tituloAcao;
 		public String sigla;
@@ -325,7 +397,7 @@ public class SrAcao extends HistoricoSuporte implements SrSelecionavel, Comparab
 		public boolean ativo;
 		public int nivel;
 		public SrTipoAcaoVO tipoAcao;
-		
+
 		public SrAcaoVO(Long id, String sigla, String descricao, String titulo, String descrAcao,  Long hisIdIni, int nivel, boolean ativo, SrTipoAcao tipoAcao) {
 			this.id = id;
 			this.sigla = sigla;
@@ -338,7 +410,7 @@ public class SrAcao extends HistoricoSuporte implements SrSelecionavel, Comparab
 			if (tipoAcao != null)
 				this.tipoAcao = tipoAcao.toVO();
 		}
-		
+
 		public String toJson() {
 			GsonBuilder builder = new GsonBuilder();
 			builder.setPrettyPrinting().serializeNulls();
@@ -347,11 +419,11 @@ public class SrAcao extends HistoricoSuporte implements SrSelecionavel, Comparab
 			return gson.toJson(this);
 		}
 	}
-	
+
 	public SrAcaoVO toVO() {
 		return new SrAcaoVO(this.idAcao,  this.siglaAcao, this.tituloAcao, this.tituloAcao, this.descrAcao, this.getHisIdIni(), this.getNivel(), this.isAtivo(), this.tipoAcao);
 	}
-	
+
 	public String toJson() {
 		return toVO().toJson();
 	}
