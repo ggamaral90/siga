@@ -43,31 +43,26 @@
 </select>
 
 <span id="spanPessoa${nomeSelPessoaClean}">
-	${nomeSelPessoaClean}
 	<siga:selecao tipo="pessoa" propriedade="pessoa" tema="simple" modulo="siga" inputName="${nomeSelPessoaClean}" 
 		 urlAcao="buscar" desativar="${desativar}" siglaInicial="${valuePessoa}"/>
 </span>
 
 <span id="spanLotacao${nomeSelLotacaoClean}">
-	${nomeSelLotacaoClean}
 	<siga:selecao tipo="lotacao" propriedade="lotacao" tema="simple" modulo="siga" inputName="${nomeSelLotacaoClean}" 
 		 urlAcao="buscar" desativar="${desativar}" siglaInicial="${valueLotacao}"/>
 </span>
 
 <span id="spanFuncao${nomeSelFuncaoClean}">
-	${nomeSelFuncaoClean}
 	<siga:selecao tipo="funcao" propriedade="funcao" tema="simple" modulo="siga" inputName="${nomeSelFuncaoClean}" 
 		 urlAcao="buscar" desativar="${desativar}" siglaInicial="${valueFuncao}"/>
 </span>
 
 <span id="spanCargo${nomeSelCargoClean}">
-	${nomeSelCargoClean}
 	<siga:selecao tipo="cargo" propriedade="cargo" tema="simple" modulo="siga" inputName="${nomeSelCargoClean}" 
 		 urlAcao="buscar" desativar="${desativar}" siglaInicial="${valueCargo}"/>
 </span>
 
 <span id="spanGrupo${nomeSelGrupoClean}">
-	${nomeSelGrupoClean}
 	<siga:selecao tipo="grupo" propriedade="grupo" tema="simple" modulo="siga" inputName="${nomeSelGrupoClean}" 
 		 urlAcao="buscar" desativar="${desativar}" siglaInicial="${valueGrupo}"/>
 </span>
