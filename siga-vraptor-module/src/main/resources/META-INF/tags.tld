@@ -78,4 +78,8 @@
 		<name>modal</name>
 		<path>/META-INF/tags/modal.tag</path>
 	</tag-file>
+	<tag-file>
+		<name>dataCalendar</name>
+		<path>/META-INF/tags/dataCalendar.tag</path>
+	</tag-file>
 </taglib>
