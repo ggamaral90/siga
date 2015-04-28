@@ -200,7 +200,7 @@ self.ajax_${propriedade}${tipoSel} = function() {
 <input type="text" name="${inputNameTipoSel}.sigla" value="<c:out value="${requestScope[propriedadeTipoSel].sigla}"/>" id="formulario_${inputNameTipoSel}_sigla" 
 	onkeypress="return handleEnter(this, event)"
 	onblur="javascript: ajax_${propriedade}${tipoSel}();" size="25"
-	"${disabledTxt}" />	
+	${disabledTxt} />	
 	
 <c:if test="${buscar != 'nao'}">
 	<input type="button" id="${propriedade}${tipoSel}SelButton" value="..."

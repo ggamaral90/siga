@@ -111,7 +111,16 @@ self.retorna_${propriedade}${tipoSel} = function(id, sigla, descricao) {
 self.newwindow_${propriedade} = '';
 self.popitup_${propriedade}${tipoSel} = function(sigla) {
 
-	var url = '/${urlPrefix}${urlBuscar}?propriedade=${propriedade}${tipoSel}&sigla='+encodeURI(sigla) +'${selecaoParams}';
+	<c:choose>
+		<c:when test="${empty urlSelecionar}">
+// 			var url = '/${urlPrefix}${acaoBusca}/selecionar.action?propriedade=${propriedade}${tipoSel}'+'${selecaoParams}';
+			var url = '/${urlPrefix}${acaoBusca}.action?propriedade=${propriedade}${tipoSel}&sigla='+encodeURI(sigla) +'${selecaoParams}';
+		</c:when>
+		<c:otherwise>
+			var url = '/${urlPrefix}${urlBuscar}?propriedade=${propriedade}${tipoSel}&sigla='+encodeURI(sigla) +'${selecaoParams}';
+		</c:otherwise>
+	</c:choose>
+	
 		
 	if (!newwindow_${propriedade}.closed && newwindow_${propriedade}.location) {
 		newwindow_${propriedade}.location.href = url;
@@ -199,7 +208,7 @@ self.ajax_${propriedade}${tipoSel} = function() {
 <input type="text" name="${inputNameTipoSel}.sigla" value="<c:out value="${requestScope[propriedadeTipoSel].sigla}"/>" id="formulario_${inputNameTipoSel}_sigla" 
 	onkeypress="return handleEnter(this, event)"
 	onblur="javascript: ajax_${propriedade}${tipoSel}();" size="25"
-	"${disabledTxt}" />	
+	${disabledTxt} />	
 	
 <c:if test="${buscar != 'nao'}">
 	<input type="button" id="${propriedade}${tipoSel}SelButton" value="..."

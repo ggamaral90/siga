@@ -82,4 +82,8 @@
 		<name>dataCalendar</name>
 		<path>/META-INF/tags/dataCalendar.tag</path>
 	</tag-file>
+	<tag-file>
+		<name>pessoaLotaFuncCargoSelecao</name>
+		<path>/META-INF/tags/pessoaLotaFuncCargoSelecao.tag</path>
+	</tag-file>
 </taglib>
