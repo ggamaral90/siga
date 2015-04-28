@@ -78,4 +78,8 @@
 		<name>modal</name>
 		<path>/META-INF/tags/modal.tag</path>
 	</tag-file>
+	<tag-file>
+		<name>desativarReativar</name>
+		<path>/META-INF/tags/desativarReativar.tag</path>
+	</tag-file>
 </taglib>
