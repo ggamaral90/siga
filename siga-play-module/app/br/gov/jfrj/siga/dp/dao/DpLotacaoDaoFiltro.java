@@ -59,11 +59,8 @@ public class DpLotacaoDaoFiltro extends DaoFiltroSelecionavel {
 		String orgaoUsu = siglaCompleta.substring(0, 2);
 		CpOrgaoUsuario cpOrgaoUsuario = new CpOrgaoUsuario();
 		cpOrgaoUsuario.setSigla(orgaoUsu);
-		CpOrgaoUsuario orgaoUsuario = CpDao.getInstance().consultarPorSigla(cpOrgaoUsuario);
-		
-		if(null != orgaoUsuario) {
-			idOrgaoUsu = orgaoUsuario.getId();
-		}
+		idOrgaoUsu = CpDao.getInstance().consultarPorSigla(cpOrgaoUsuario)
+				.getId();
 
 		setSigla(siglaCompleta.substring(2));
 	}

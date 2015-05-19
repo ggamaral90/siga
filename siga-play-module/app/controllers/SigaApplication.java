@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.lucene.analysis.ReusableAnalyzerBase;
 import org.hibernate.Session;
 import org.jboss.security.SecurityContextAssociation;
 
@@ -17,8 +18,8 @@ import play.db.jpa.JPA;
 import play.mvc.Catch;
 import play.mvc.Controller;
 import play.mvc.Http;
-import play.mvc.Http.Request;
 import play.mvc.Scope;
+import play.mvc.Http.Request;
 import play.mvc.Scope.Params;
 import play.mvc.Scope.RenderArgs;
 import play.templates.JavaExtensions;
@@ -174,23 +175,23 @@ public class SigaApplication extends Controller {
 		error(e.getMessage());
 	}
 
-	protected static DpPessoa cadastrante() {
+	static DpPessoa cadastrante() {
 		return (DpPessoa) RenderArgs.current().get("cadastrante");
 	}
 
-	protected static DpPessoa titular() {
+	static DpPessoa titular() {
 		return (DpPessoa) RenderArgs.current().get("titular");
 	}
 
-	protected static DpLotacao lotaTitular() {
+	static DpLotacao lotaTitular() {
 		return (DpLotacao) RenderArgs.current().get("lotaTitular");
 	}
 
-	protected static CpIdentidade idc() {
+	static CpIdentidade idc() {
 		return (CpIdentidade) RenderArgs.current().get("identidadeCadastrante");
 	}
 
-	protected static String getBaseSiga() {
+	static String getBaseSiga() {
 		return "http://" + Play.configuration.getProperty("servidor.principal")+ ":"+Play.configuration.getProperty("porta.principal")+"/siga";
 //		return Request.current().getBase() + "/siga";
 	}
