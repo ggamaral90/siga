@@ -1,6 +1,7 @@
 <%@ tag body-content="scriptless"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="ww" uri="/webwork"%>
 <%@ attribute name="var" required="false"%>
 <%@ attribute name="id" required="false"%>
 

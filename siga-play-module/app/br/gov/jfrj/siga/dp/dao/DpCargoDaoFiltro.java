@@ -23,7 +23,6 @@ import br.gov.jfrj.siga.model.dao.DaoFiltroSelecionavel;
 public class DpCargoDaoFiltro extends DaoFiltroSelecionavel {
 	private String nome;
 	private Long idOrgaoUsu;
-	private Long idCargoIni;
 
 	public Long getIdOrgaoUsu() {
 		return idOrgaoUsu;
@@ -39,13 +38,5 @@ public class DpCargoDaoFiltro extends DaoFiltroSelecionavel {
 
 	public void setNome(final String nome) {
 		this.nome = nome;
-	}
-
-	public Long getIdCargoIni() {
-		return this.idCargoIni;
-	}
-
-	public void setIdCargoIni(Long idCargoIni) {
-		this.idCargoIni = idCargoIni;
 	}
 }

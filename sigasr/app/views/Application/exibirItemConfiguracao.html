@@ -6,7 +6,6 @@ $(document).ready(function() {
 });
 
 function carregarAcao(){
-	jQuery.blockUI(objBlock);
 	frm = document.getElementById('formSolicitacao');
 	params = '';
 	for (i = 0; i < frm.length; i++){
@@ -22,7 +21,6 @@ function carregouAcao(response, param){
 	var scripts = div.getElementsByTagName("script");
 	for(var i=0;i<scripts.length;i++)  
 	   eval(scripts[i].text);
-	jQuery.unblockUI();
 }
 </script>
 
@@ -31,7 +29,7 @@ function carregouAcao(response, param){
 	nome:'solicitacao.itemConfiguracao',
 	value:solicitacao.itemConfiguracao, grande:true, onchange:"carregarAcao();notificarCampoMudou('#solicitacaoitemConfiguracao', 'Item', 'solicitacao.itemConfiguracao')",
 	params:'sol.solicitante='+solicitacao.solicitante?.idPessoa+'&sol.local='+solicitacao.local?.idComplexo+
-				'&sol.titular='+titular?.idPessoa+'&sol.lotaTitular='+lotaTitular?.idLotacao /} <span style="color: red">#{error
+				'&sol.cadastrante.idPessoa='+cadastrante?.idPessoa+'&sol.lotaCadastrante.idLotacao='+lotaTitular?.idLotacao /} <span style="color: red">#{error
 		'solicitacao.itemConfiguracao' /}</span>
 </div>
 <div id="divAcao">#{include 'Application/exibirAcao.html' /}</div>

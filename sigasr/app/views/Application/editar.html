@@ -44,29 +44,7 @@
 		});
 
 		carregarFiltrosAoIniciar();
-
-		// DB1: Sobrescreve o método onchange para que faça o tratamento das informações 
-		// do campo vinculado ao evento
-		jQuery("#checkmostrarInterlocutor")[0].onchange = function(event) {
-			changemostrarInterlocutor();
-			showInterlocutor(this.checked, 'interlocutor');
-		};
 	});
-
-	function showInterlocutor(checked, divName){
-		var div = document.getElementById(divName);
-		if (div) {
-			if (checked)
-				div.style.display = 'inline';
-			else {
-				div.style.display = 'none';
-				jQuery("#solicitacaointerlocutor").val("");
-				jQuery("#solicitacaointerlocutor_descricao").val("");
-				jQuery("#solicitacaointerlocutor_sigla").val("");
-				jQuery("#solicitacaointerlocutorSpan").html("");
-			}
-		}
-	}
 
 	function formatarValorTimer(num) {
 		if (num.toString().length == 1) 
@@ -76,22 +54,16 @@
 	};
 	
 	function carregarLocalRamalEMeioContato() {
-		//jQuery.blockUI(objBlock);
 		frm = document.getElementById('formSolicitacao');
 		params = '';
 		for (i = 0; i < frm.length; i++){
 			if (frm[i].name && frm[i].value)
 				params = params + frm[i].name + '=' + escape(frm[i].value) + '&';
 		}
-
-		var url = '@{Application.exibirLocalRamalEMeioContato()}?' + params;
-		Siga.ajax(url, null, "GET", function(response){
-			carregouLocalRamalEMeioContato(response);
-		});
-	//	PassAjaxResponseToFunction(, 'carregouLocalRamalEMeioContato', null, false, null);
+		PassAjaxResponseToFunction('@{Application.exibirLocalRamalEMeioContato()}?' + params, 'carregouLocalRamalEMeioContato', null, false, null);
 	}
 	
-	function carregouLocalRamalEMeioContato(response){
+	function carregouLocalRamalEMeioContato(response, param){
 		var div = document.getElementById('divLocalRamalEMeioContato');
 		div.innerHTML = response;
 				
@@ -107,56 +79,42 @@
 		var scripts = div.getElementsByTagName("script");
 		for(var i=0;i<scripts.length;i++)  
 			   eval(scripts[i].text); 
-		//jQuery.unblockUI();
 	}
 	
 	function carregarItem(){
-		jQuery.blockUI(objBlock);
 		frm = document.getElementById('formSolicitacao');
 		params = '';
 		for (i = 0; i < frm.length; i++){
 			if (frm[i].name && frm[i].value)
 				params = params + frm[i].name + '=' + escape(frm[i].value) + '&';
 		}
-		var url = '@{Application.exibirItemConfiguracao()}?' + params;
-		Siga.ajax(url, null, "GET", function(response){		
-			carregouItem(response);
-		});
-		
-		//PassAjaxResponseToFunction( + params, 'carregouItem', null, false, null);
+		PassAjaxResponseToFunction('@{Application.exibirItemConfiguracao()}?' + params, 'carregouItem', null, false, null);
 	}
 	
-	function carregouItem(response){
+	function carregouItem(response, param){
 		var div = document.getElementById('divItem');
 		div.innerHTML = response;
 		var scripts = div.getElementsByTagName("script");
 		for(var i=0;i<scripts.length;i++)  
 		   eval(scripts[i].text);  
-		jQuery.unblockUI();
 	}
 
 	function carregarConhecimentosRelacionados(){
-		//jQuery.blockUI(objBlock);
 		frm = document.getElementById('formSolicitacao');
 		params = '';
 		for (i = 0; i < frm.length; i++){
 			if (frm[i].name && frm[i].value)
 				params = params + frm[i].name + '=' + escape(frm[i].value) + '&';
 		}
-		var url = '@{Application.exibirConhecimentosRelacionados()}?' + params;
-		Siga.ajax(url, null, "GET", function(response){		
-			carregouConhecimentosRelacionados(response);
-		});
-		//PassAjaxResponseToFunction('@{Application.exibirConhecimentosRelacionados()}?' + params, 'carregouConhecimentosRelacionados', null, false, null);
+		PassAjaxResponseToFunction('@{Application.exibirConhecimentosRelacionados()}?' + params, 'carregouConhecimentosRelacionados', null, false, null);
 	}
 	
-	function carregouConhecimentosRelacionados(response){
+	function carregouConhecimentosRelacionados(response, param){
 		var div = document.getElementById('divConhecimentosRelacionados');
 		div.innerHTML = response;
 		var scripts = div.getElementsByTagName("script");
 		for(var i=0;i<scripts.length;i++)  
 		   eval(scripts[i].text);  
-		//jQuery.unblockUI();
 	}
 
 	function carregarPrioridade() {
@@ -167,11 +125,9 @@
 		params = gravidade.name + '=' + escape(gravidade.value) + '&' + 
 					urgencia.name + '=' + escape(urgencia.value) + '&' +
 					tendencia.name + '=' + escape(tendencia.value) + '&';
-		
-		var url = '@{Application.exibirPrioridade()}?' + params;
-		Siga.ajax(url, null, "GET", function(response){		
-			$("#divPrioridade").html(response);
-		});					
+					
+		ReplaceInnerHTMLFromAjaxResponse('@{Application.exibirPrioridade()}?' + params,
+				null, document.getElementById('divPrioridade'));
  	}
 	
 	// funções usadas para solicitações relacionadas
@@ -291,12 +247,7 @@
 			if(existeFiltroSelecionavel()) {
 				var params = construirParametrosDoFiltro($('#formSolicitacao'));
 				iniciarCarregarSolicitacoesRelacionadas();
-				//jQuery.blockUI(objBlock);
-				
-				var url = '@{Application.listarSolicitacoesRelacionadas()}?' + params;
-				Siga.ajax(url, null, "GET", function(response){
-					carregouSolicitacoesRelacionadas(response);
-				});				
+				PassAjaxResponseToFunction('@{Application.listarSolicitacoesRelacionadas()}?' + params, 'carregouSolicitacoesRelacionadas', null, false, null);
 			}
 		}
 		// Senao, apenas mostra informacao
@@ -325,7 +276,6 @@
 		}
 		$('#filtro input').attr('disabled', false);
 		$('#bodySolRelacionadas').attr('requesting', false);
-		//jQuery.unblockUI();
 	}
 
 	function iniciarCarregarSolicitacoesRelacionadas() {
@@ -339,7 +289,7 @@
 		
 		addFiltroAoIniciar(divFiltro, '#solicitacaosolicitante', 'Solicitante', 'solicitacao.solicitante');
 		addFiltroAoIniciar(divFiltro, '#solicitacaoitemConfiguracao', 'Item', 'solicitacao.itemConfiguracao');
-		addFiltroAoIniciar(divFiltro, '#selectAcao', 'A&ccedil;&atilde;o', 'solicitacao.acao');
+		addFiltroAoIniciar(divFiltro, '#selectAcao', 'Ação', 'solicitacao.acao');
 
 		carregarFiltrosAtributos();
 		
@@ -477,9 +427,8 @@
 					<label>Cadastrante</label> ${cadastrante.nomePessoa} <input
 						type="hidden" id="siglaCadastrante" name="cadastrante.sigla"
 						value="${cadastrante.sigla}" />
-						<input type="hidden" id="siglaCadastrante" name="solicitacao.cadastrante" value="${cadastrante.idPessoa}" />
-						<input type="hidden" name="solicitacao.lotaTitular" value="${lotaTitular?.idLotacao}" />
-						<input type="hidden" name="solicitacao.titular" value="${titular?.idPessoa}" />
+						<input type="hidden" id="siglaCadastrante" name="solicitacao.cadastrante.idPessoa" value="${cadastrante.idPessoa}" />
+						<input type="hidden" name="solicitacao.lotaCadastrante.idLotacao" value="${lotaTitular?.idLotacao}" />
 				</div>
 			</div>	 
 
@@ -521,7 +470,7 @@
 			<div class="gt-form-row gt-width-66">
 				<label>Descrição</label>
 				<textarea cols="85" rows="10" name="solicitacao.descrSolicitacao"
-					id="descrSolicitacao" maxlength="8192">${solicitacao.descrSolicitacao}</textarea>
+					id="descrSolicitacao">${solicitacao.descrSolicitacao}</textarea>
 				<span style="color: red">#{error
 					'solicitacao.descrSolicitacao' /}</span>
 			</div>
@@ -560,7 +509,7 @@
 			</div>
 
 
-			#{if solicitacao.podeAbrirJaFechando(titular, lotaTitular)}
+			#{if solicitacao.podeAbrirJaFechando(lotaTitular,cadastrante)}
 			<div class="gt-form-row gt-width-66">
 				<label>#{checkbox name:'solicitacao.fecharAoAbrir',
 					value:solicitacao.fecharAoAbrir, depende:'motivoFechamento',

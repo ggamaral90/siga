@@ -37,7 +37,6 @@
 		}
 			
 		$("#checkmostrarDesativado").click(function() {
-			jQuery.blockUI(objBlock);
 			if (document.getElementById('checkmostrarDesativado').checked)
 				location.href = '@{Application.listarAcordoNivelServicoDesativados()}';
 			else
@@ -542,7 +541,7 @@
           			'false',
           			
           			// Atualiza as informações das listas da designação
-          			getListasAcordoAsString(),
+          			getListasAsString(),
 					tdAcordoNivelServico.find('td.acoes').html(),
           			ativo
 		];
@@ -677,7 +676,7 @@
  		return acordoNivelServicoJson;
 	}
 	
-	function getListasAcordoAsString() {
+	function getListasAsString() {
 		var params = '';
 	
 		// Percorre lista de Itens de Configuração
@@ -983,6 +982,7 @@
         	}
        	});
 	}
+	
 </script>
 
 <div class="gt-content">
@@ -1013,8 +1013,8 @@
 					<th>Descr. Solicitante</th>
 					<th>Solicitante</th>
 					<th>Item Configuração</th>
-					<th>A&ccedil;&atilde;o</th>
-					<th>Sigla A&ccedil;&atilde;o</th>
+					<th>Ação</th>
+					<th>Sigla Ação</th>
 					<th>ID Atendente</th>
 					<th>Descr. Atendente</th>
 					<th>Atendente</th>
