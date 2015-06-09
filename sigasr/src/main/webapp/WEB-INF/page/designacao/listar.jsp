@@ -1,8 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
-
-<siga:pagina titulo="Seguran&ccedil;a">
+<siga:pagina titulo="Designação de Solicitações">
 	<jsp:include page="../main.jsp"></jsp:include>
 
 	<script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
@@ -25,17 +24,17 @@
 				
 				//removendo a referencia de '$' para o jQuery
 				$( document ).ready(function() {
-// 					if ("${mostrarDesativado}" != "") {
-// 						document.getElementById('checkmostrarDesativado').checked = '${mostrarDesativado}';
-// 						document.getElementById('checkmostrarDesativado').value = '${mostrarDesativado}';
-// 					}
-						
+					if ("${mostrarDesativados}" != "") {
+						document.getElementById('checkmostrarDesativados').checked = ${mostrarDesativados};
+						document.getElementById('checkmostrarDesativados').value = ${mostrarDesativados};
+					}
+					
 					$("#checkmostrarDesativados").click(function() {
 						jQuery.blockUI(objBlock);
 						if (document.getElementById('checkmostrarDesativados').checked)
-							location.href = '${linkTo[DesignacaoController].listarDesativados}';
+							location.href = '${linkTo[DesignacaoController].listar}' + '?mostrarDesativados=true';
 						else
-							location.href = '${linkTo[DesignacaoController].listar}';
+							location.href = '${linkTo[DesignacaoController].listar}' + '?mostrarDesativados=false';
 					});
 				});
 			</script>

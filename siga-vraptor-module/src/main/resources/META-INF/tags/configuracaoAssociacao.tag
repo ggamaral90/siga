@@ -22,7 +22,7 @@
             	<b>Incluir Inativas</b>
             </label>
         </div>        
-		<table id="associacao_table" border="0" class="gt-table display">
+		<table id="associacao_table" class="gt-table display">
 			<thead>
 				<tr>
 					<th style="color: #333">
@@ -60,10 +60,10 @@
 				<label>Solicitante</label> 
 				<siga:pessoaLotaFuncCargoSelecao
 						nomeSelLotacao="lotacao"
-						nomeSelPessoa="pessoa"
-						nomeSelFuncao="funcao"
+						nomeSelPessoa="dpPessoa"
+						nomeSelFuncao="funcaoConfianca"
 						nomeSelCargo="cargo"
-						nomeSelGrupo="grupo"
+						nomeSelGrupo="cpGrupo"
 						valuePessoa="${dpPessoa != null ? dpPessoa.pessoaAtual :'' }"
 						valueLotacao="${lotacao != null ? lotacao.lotacaoAtual : '' }"
 						valueFuncao="${funcaoConfianca }"
@@ -196,7 +196,8 @@
             return;
 
 		// reset no componente de pessoaLotaFuncCargoSelecao
-		$("#pessoalotacaofuncaocargogrupo")[0].changeValue(1);
+		$("#dpPessoalotacaofuncaoConfiancacargocpGrupo")[0].clearAll();
+		$("#dpPessoalotacaofuncaoConfiancacargocpGrupo")[0].changeValue(1);
 		configuracaoItemAcaoService.iniciarDataTables();
 		BaseService.prototype.cadastrar.call(this, title);	
 	}
@@ -206,7 +207,8 @@
 	 */
 	 associacaoService.editar = function(obj, title) {
 		// reset no componente de pessoaLotaFuncCargoSelecao
-		$("#pessoalotacaofuncaocargogrupo")[0].changeValue(1);
+		$("#dpPessoalotacaofuncaoConfiancacargocpGrupo")[0].clearAll();
+		$("#dpPessoalotacaofuncaoConfiancacargocpGrupo")[0].changeValue(1);
 		
 		BaseService.prototype.editar.call(this, obj, title); // super.editar();
 	}
@@ -218,7 +220,7 @@
 		if (modoExibicao == 'atributo'){
 			obj.atributo = { idAtributo : $('#idAtributo').val() };
 		} else if (modoExibicao == 'pesquisa'){ 
-			obj.pesquisaSatisfacao = { idPesquisa : $('#idPesquisa').val() };
+			obj.pesquisa = { idPesquisa : $('#idPesquisa').val() };
 		}
 		return obj;
 	}
@@ -226,11 +228,12 @@
 	associacaoService.onGravar = function(obj, objSalvo) {
 		var tr = BaseService.prototype.onGravar.call(this, obj, objSalvo);
 		var modoExibicao = "${modoExibicao}";
+		var item = null;
 		
 		if (modoExibicao == 'atributo'){
 			item =  this.getItemPaiPorId(obj.atributo.idAtributo);
-		} else if (modoExibicao == 'pesquisa'){
-			item = this.getItemPaiPorId(obj.pesquisaSatisfacao.idPesquisa);
+		} else if  (modoExibicao == 'pesquisa'){
+			item = this.getItemPaiPorId(obj.pesquisa.idPesquisa);
 		}
 
 		// Se eh edicao mantem o json atualizado
@@ -277,7 +280,6 @@
     }
 
 	associacaoService.serializar = function(obj) {
-		debugger;
 		var serializado = BaseService.prototype.serializar.call(this, obj) + "&" + associacaoService.getListasAsString();
 		return serializado + "&associacao=" + this.getId(obj);
 	}
@@ -398,7 +400,7 @@
 	function detalhesListaAssociacao(d, associacao) {
 		var tr = $('<tr class="detail">'),
 			td = $('<td colspan="6">'),
-			table = $('<table class="datatable" cellpadding="5" cellspacing="0" border="0" style="margin-left:60px;">'),
+			table = $('<table class="datatable" cellpadding="5" cellspacing="0" style="margin-left:60px;">'),
 			trItens = $('<tr>'),
 			trAcoes = $('<tr>');
 

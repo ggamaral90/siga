@@ -71,10 +71,9 @@
 </style>
 		<div class="gt-form gt-content-box div-editar-equipe">
 			<form id="form" class="formEditarEquipe" enctype="multipart/form-data">
-				<input type="hidden" id="equipeHidden" name="equipe">
 				<input type="hidden" id="idEquipe" name="equipe.idEquipe">
 				<input type="hidden" id="idEquipeIni" name="equipe.hisIdIni">
-				<input type="hidden" id="lotacaoUsuario" name="lotacaoUsuario" value='${lotacaoUsuario.toJson()}'/>
+				
 				<p class="gt-error" style="display:none;" id="erroEquipeCamposObrigatorios">Alguns campos obrigatórios não foram preenchidos</p>
 				<div class="gt-form-table">
 					<div class="barra-subtitulo barra-subtitulo-top header"
@@ -82,7 +81,8 @@
 				</div>
 				<div class="gt-form-row gt-width-100">
 					<label>Lotação</label>
-					<siga:selecao propriedade="lotacao" tema="simple" modulo="siga" urlAcao="buscar" desativar="sim" inputName="lotacaoEquipe" />
+					<input type="hidden" name="lotacaoEquipe" id="lotacaoEquipe" class="selecao">
+					<siga:selecao propriedade="lotacaoEquipe" tema="simple" modulo="siga" urlAcao="buscar" desativar="sim" />
 				</div>
 				
 				<div class="gt-form-table">
@@ -91,10 +91,10 @@
 				</div>
 				
 				<div class="gt-form-row">
-					<h2>Exceções ao calendário padrão</h2>
+					<label style="font-weight: bold;">Exceções ao calendário padrão</label>
 					<!-- content bomex -->
 					<div class="gt-content-box dataTables_div">
-						<table id="excecoes_table" border="0" class="gt-table display">
+						<table id="excecoes_table" class="gt-table display">
 							<thead>
 								<tr>
 									<th>Dia Semana</th>
@@ -122,7 +122,7 @@
 			</form>
 			
 			<div class="gt-form-row">
-				<siga:designacao modoExibicao="equipe" designacoes="${designacoes}" mostrarDesativado="mostrarDesativado"
+				<siga:designacao modoExibicao="equipe" designacoes="${designacoes}" mostrarDesativados="mostrarDesativado"
 					unidadesMedida="${unidadesMedida}" orgaos="${orgaos}" locais="${locais}" 
 					pesquisaSatisfacao="${pesquisaSatisfacao}" listasPrioridade="${listasPrioridade}" /> 
 			</div>
@@ -143,7 +143,7 @@
 						<select name="diaSemana" class="select-siga" style="{width:100%;}">
 							<option value=0>Nenhuma</optgroup>
 							<c:forEach items="${diasSemana}" var="dia">
-								<option value="${dia.idDiaSemana}">${dia.descrDiaSemana}</option>
+								<option value="${dia}">${dia.descrDiaSemana}</option>
 							</c:forEach>						
 						</select> 
 						<span style="display:none;color: red" id="diaSemanaError">Dia da Semana não informado</span>
@@ -213,7 +213,7 @@
 		$("#interIni").rules("add", {hora: ""});
 		$("#interFim").rules("add", {hora: ""});
 	});
-	
+
 	function modalExcecaoAbrir() {
 		// limpa as mensagens de erros
 		resetMensagensErro();
@@ -290,6 +290,11 @@
 		validatorFormExcessao.resetForm();
 		document.getElementById("diaSemanaError").style.display = "none";
 		document.getElementById("dataEspecificaError").style.display = "none";
+
+		$("#horaIni").removeClass("error");
+		$("#horaFim").removeClass("error");
+		$("#interIni").removeClass("error");
+		$("#interFim").removeClass("error");
 	}
 	
 	function resetCamposTela() {
@@ -301,6 +306,10 @@
         document.getElementById("interIni").value = '';
         document.getElementById("interFim").value = '';
         document.getElementById("dataEspecifica").value = '';
+	}
+
+	function atualizaData(dataString) {
+		return new Date(dataString);
 	}
 	
 	function atualizaHora(data, horaString) {

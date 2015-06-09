@@ -1,18 +1,21 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
-<siga:pagina titulo="Servi�os">
+<siga:pagina titulo="Acordos">
 
 	<jsp:include page="../main.jsp"></jsp:include>
 
-	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-	<script src="/siga/javascript/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
 	<script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-	<script src="../../../javascripts/jquery.serializejson.min.js"></script>
-	<script src="../../../javascripts/jquery.populate.js"></script>
-	<script src="../../../javascripts/jquery.maskedinput.min.js"></script>
-	<script src="../../../javascripts/base-service.js"></script>
-	
+	<script src="/siga/javascript/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
+	<script src="/sigasr/javascripts/jquery.serializejson.min.js"></script>
+	<script src="/sigasr/javascripts/jquery.populate.js"></script>
+	<script src="/sigasr/javascripts/base-service.js"></script>
+	<script src="/sigasr/javascripts/detalhe-tabela.js"></script>
+	<script src="/sigasr/javascripts/jquery.maskedinput.min.js"></script>
+	<script src="/sigasr/javascripts/jquery.validate.min.js"></script>
+	<script src="/sigasr/javascripts/language/messages_pt_BR.min.js"></script>
+	<script src="/sigasr/javascripts/moment.js"></script>
+    
 	<div class="gt-bd clearfix">
 		<div class="gt-content">
 			<h2>Acordos</h2>
@@ -24,11 +27,11 @@
 						<b>Incluir Inativas</b>
 					</label>
 				</div>				
-				<table id="acordo_table" border="0" class="gt-table display">
+				<table id="acordo_table" class="gt-table display">
 					<thead>
 						<tr>
 							<th>Nome</th>
-							<th>Descrição</th>
+							<th>Descri&ccedil;&atilde;o</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -36,17 +39,17 @@
 					<tbody>
 						<c:forEach items="${acordos}" var="acordo">
 							<tr <c:choose>	
-									<c:when test="${popup == true}">
+									<c:when test="${popup}">
 										onclick="javascript:opener.retorna_acordo${nome}('${acordo.id}','${acordo.id}','${acordo.nomeAcordo}');window.close()"
 									</c:when>
 									<c:otherwise>
-										data-json-id="${acordo.id}" data-json="${acordo.toJson()}" onclick="acordoService.editar($(this).data('json'), 'Alterar Acordo')"
+										data-json-id="${acordo.id}" data-json='${acordo.toJson()}' onclick="acordoService.editar($(this).data('json'), 'Alterar Acordo')"
 									</c:otherwise>
 								</c:choose>
 									style="cursor: pointer;">
 									<td >${acordo.nomeAcordo}</td>
 									<td>${acordo.descrAcordo}</td>
-									<td class="acordos">
+									<td class="acoes">
 										<siga:desativarReativar id="${acordo.idAcordo}" onReativar="acordoService.reativar" onDesativar="acordoService.desativar" isAtivo="${acordo.isAtivo()}"></siga:desativarReativar>
 									</td>
 							</tr>
@@ -65,10 +68,8 @@
 	<br /><br /><br />
 	
 	<siga:modal nome="acordo" titulo="Cadastrar Acordo">
-		<div id="divEditarAcordo"><jsp:include page="editar.jsp"></jsp:include></div>
-	</siga:modal>	
-	
-	
+		<div id="divEditarAcordoForm"><jsp:include page="editar.jsp"></jsp:include></div>
+	</siga:modal>
 </siga:pagina>
 
 <script>
@@ -110,15 +111,15 @@
 			
 		$("#checkmostrarDesativados").click(function() {
 			if (document.getElementById('checkmostrarDesativados').checked)
-				location.href = "${linkTo[AcordoController].listarDesativados}";
+				location.href = "${linkTo[AcordoController].listar}"  + '?mostrarDesativados=true';
 			else
-				location.href = "${linkTo[AcordoController].listar}";	
+				location.href = "${linkTo[AcordoController].listar}"  + '?mostrarDesativados=false';	
 		});
 
-		
 		optsAcordo.acordoTable = $('#acordo_table').dataTable({
+			stateSave : true,
 			"language": {
-				"emptyTable":     "Não existem resultados",
+				"emptyTable":     "N&atilde;o existem resultados",
 			    "info":           "Mostrando de _START_ a _END_ do total de _TOTAL_ registros",
 			    "infoEmpty":      "Mostrando de 0 a 0 do total de 0 registros",
 			    "infoFiltered":   "(filtrando do total de _MAX_ registros)",
@@ -131,13 +132,13 @@
 			    "zeroRecords":    "Nenhum registro encontrado",
 			    "paginate": {
 			        "first":      "Primeiro",
-			        "last":       "Último",
-			        "next":       "Próximo",
+			        "last":       "&Uacute;ltimo",
+			        "next":       "Pr&oacute;ximo",
 			        "previous":   "Anterior"
 			    },
 			    "aria": {
-			        "sortAscending":  ": clique para ordenação crescente",
-			        "sortDescending": ": clique para ordenação decrescente"
+			        "sortAscending":  ": clique para ordena��o crescente",
+			        "sortDescending": ": clique para ordena��o decrescente"
 			    }
 			},
 			"columnDefs": [{
@@ -168,14 +169,14 @@
 	});
 
 	var optsAcordo = {
-			 urlDesativar : "${linkTo[AcordoController].desativarAcordo}",
-			 urlReativar : "${linkTo[AcordoController].reativarAcordo}",
+			 urlDesativar : "${linkTo[AcordoController].desativar}",
+			 urlReativar : "${linkTo[AcordoController].reativar}",
 			 urlGravar : "${linkTo[AcordoController].gravarAcordo}",
-			 dialogCadastro : $('#editarAcordo_dialog'),
+			 dialogCadastro : $('#acordo_dialog'),
 			 tabelaRegistros : $('#acordo_table'),
 			 objectName : 'acordo',
 			 formCadastro : jQuery('#acordoForm'),
-			 mostrarDesativados : QueryString.mostrarDesativados,
+			 mostrarDesativados : $('#checkmostrarDesativados').attr('checked') ? true : false,
 			 colunas : colunasAcordo.acoes
 	};
 
@@ -191,7 +192,7 @@
 	var acordoService = new AcordoService(optsAcordo);
 	
 	acordoService.getId = function(acordo) {
-		return acordo.id;
+		return acordo.idAcordo || acordo['acordo.idAcordo'] || acordo['id'] || '';
 	}
 
 	acordoService.getRow = function(acordo) {
@@ -202,20 +203,12 @@
 		acordoService.editar(acordo, 'Alterar Acordo');
 	}
 
-	/**
-	* Sobrescreve o método gravar para tratar a lista de parâmetros.
-	*/
-	acordoService.gravar = function() {
-		gravarAplicar(this, false);
-	}
 
-	/**
-	* Sobrescreve o método aplicar para tratar a lista de parâmetros.
-	*/
-	acordoService.aplicar = function() {
-		return gravarAplicar(this, true);
-	}
 
+	function isValidForm() {
+	    return jQuery("#acordoForm").valid();
+	}
+    
 	function gravarAplicar(baseService, isAplicar) {
 		if (!baseService.isValidForm())
 			return false;
@@ -263,26 +256,50 @@
 		carregarAbrangenciasAcordo(obj.id);
 	}
 
+	/**
+	 * Sobescreve o metodo cadastrar para limpar a tela.
+	 */
+	acordoService.cadastrar = function(title) {
+		// Atualiza a lista de parâmetros
+		atualizarParametrosAcordo();
+
+		// carrega a Abrangências do Acordo
+		carregarAbrangenciasAcordo();
+		
+		BaseService.prototype.cadastrar.call(this, title); // super.editar();
+	}	
+
+	acordoService.serializar = function(obj) {
+		var query = BaseService.prototype.serializar.call(this, obj) + serializeParametrosAcordo();
+		return query + "&acordo=" + this.getId(obj);
+	}
+
 	function carregarAbrangenciasAcordo(id) {
-		tableAssociacao.api().clear().draw();
 
 		if (id) {
 			$.ajax({
 	        	type: "GET",
-	        	url: "@{Application.buscarAbrangenciasAcordo()}?id=" + id,
+                url: "${linkTo[AcordoController].buscarAbrangenciasAcordo}?id=" + id,
 	        	dataType: "text",
 	        	success: function(lista) {
 	        		var listaJSon = JSON.parse(lista);
 	        		acordoService.populateFromJSonList(listaJSon, associacaoTable);
 	        	},
 	        	error: function(error) {
-	            	alert("Não foi possível carregar as Abrangências deste Acordo.");
+	            	alert("N�o foi poss�vel carregar as Abrang�ncias deste Acordo.");
 	        	}
 	       	});
+		}
+		else {
+			associacaoTable.clear();
 		}
     }
 
 	acordoService.populateFromJSonList = function(listaJSon, dataTable) {
+		this.limparDadosAssociacoes();
+
+		var table = associacaoTable.table;
+		
 		for (var i = 0; i < listaJSon.length; i++) {
 			var abrangencia = listaJSon[i];
 				row = [
@@ -302,29 +319,84 @@
 		          		abrangencia.descPrioridade ? abrangencia.descPrioridade : '',
 				        abrangencia.idConfiguracao,												// colunas.idAssociacao
 				        abrangencia.hisIdIni,													// colunas.idAssociacao
-						'',																		// colunas.botaoExcluir
-				        abrangencia																// colunas.jSon
+						'COLUNA_ACOES',															// colunas.botaoExcluir
+				        JSON.stringify(abrangencia)												// colunas.jSon
 		   			];
 
-				
-	        row[colunasAssociacao.botaoExcluir] = acordoService.conteudoColunaAcao(abrangencia);
-	        var tr = tableAssociacao.api().row.add(row).draw().node();
+			var tr = TableHelper.criarTd(row);
+            
+            acordoService.adicionarFuncionalidadesNaLinhaDeAssociacao(tr, abrangencia, row);
+            table.append(tr);
+
             if (!abrangencia.ativo) {
                 $('td', $(tr)).addClass('item-desativado');
-                $('td:last', $(tr)).html(' ');
             }    
 	    	
 		}
+		acordoService.configurarAssociacaoDataTable();
 	}
 
+    acordoService.adicionarFuncionalidadesNaLinhaDeAssociacao = function(node, assoc, row) {
+        node.data('json', assoc);
+        node.data('json-id', assoc.idConfiguracao);
+        node.attr('data-json', JSON.stringify(assoc));
+        node.attr('data-json-id', assoc.idConfiguracao);
+        node.find('td:first').addClass('details-control');
+
+        var indiceAcoes = this.indiceAcoes(node),
+            tdAcoes = node.find('td:nth(' + indiceAcoes + ')').addClass('acoes');
+        tdAcoes.html(acordoService.conteudoColunaAcao(assoc));
+        
+        node.on('click', function() {
+        	var associacao = node.data('json');
+        	associacaoTable.table.find('.selected').removeClass('selected');
+        	node.addClass('selected');
+        	
+            row[colunasAssociacao.jSon] = JSON.stringify(associacao);
+            atualizarAssociacaoModal(row, associacao);
+            associacaoModalAbrir(true);
+        });
+    }
+	
+    acordoService.configurarAssociacaoDataTable = function() {
+    	associacaoTable = new SigaTable('#associacao_table')
+            .configurar("columnDefs", [{
+            	"targets": [colunasAssociacao.idOrgao, 
+                            colunasAssociacao.idLocal, 
+                            colunasAssociacao.tipoSolicitante, 
+                            colunasAssociacao.idSolicitante, 
+                            colunasAssociacao.descricaoSolicitante, 
+                            colunasAssociacao.idAtendente, 
+                            colunasAssociacao.idPrioridade, 
+                            colunasAssociacao.descricaoAtendente, 
+                            colunasAssociacao.idAssociacao,
+                            colunasAssociacao.hisIdIni,
+                            colunasAssociacao.jSon],
+                "visible": false,
+                "searchable": false
+            },
+            {
+                "targets": [colunasAssociacao.botaoExpandir],
+                "sortable": false,
+                "searchable" : false
+            }])
+            .configurar("fnRowCallback", associacaoRowCallback)
+            .criar()
+            .detalhes(detalhesListaAssociacao);
+    }
+
+    acordoService.limparDadosAssociacoes = function() {
+        if(associacaoTable) {
+            associacaoTable.destruir();
+        }
+    }
+	
 	acordoService.conteudoColunaAcao = function(abrangencia){
         if (abrangencia.ativo) {          
-            return '<td class="gt-celula-nowrap" style="font-size: 13px; font-weight: bold; border-bottom: 1px solid #ccc !important; padding: 7px 10px;">' +
-					'<a class="once desassociar" onclick="desassociar(event, ' + abrangencia.idConfiguracao + ')" title="Remover permissão">' +
+            return '<a class="once desassociar" onclick="desassociar(event, ' + abrangencia.idConfiguracao + ')" title="Remover permiss&atilde;o">' +
 					'<input class="idAssociacao" type="hidden" value="'+abrangencia.idConfiguracao+'"/>' +
 					'<img id="imgCancelar" src="/siga/css/famfamfam/icons/cancel_gray.png" style="margin-right: 5px;">' + 
-					'</a>' +	
-					'</td>';
+					'</a>';	
         }
         return ' ';
 	}	
@@ -337,7 +409,7 @@
 			for (var i = 0; i < acordo.atributoAcordoSet.length; i++) {
 				var item = acordo.atributoAcordoSet[i];
 
-				$("#parametrosAcordo")[0].incluirItem(item.atributo.idAtributo, item.atributo.nomeAtributo, item.operador, item.operadorNome, item.valor, item.unidadeMedida.idUnidadeMedida, item.unidadeMedidaPlural, item.idAcordoAtributo);
+				$("#parametrosAcordo")[0].incluirItem(item.atributo.idAtributo, item.atributo.nomeAtributo, item.operador, item.operadorNome, item.valor, item.unidadeMedida.idUnidadeMedida, item.unidadeMedidaPlural, item.idAtributoAcordo);
 			}
 		}
 	}
@@ -348,17 +420,5 @@
             $("#"+nomeLista)[0]["index"]--;
         });
     }
-
-	/**
-	 * Sobescreve o metodo cadastrar para limpar a tela.
-	 */
-	acordoService.cadastrar = function(title) {
-		// Atualiza a lista de parâmetros
-		atualizarParametrosAcordo();
-
-		// carrega a Abrangências do Acordo
-		carregarAbrangenciasAcordo();
-		
-		BaseService.prototype.cadastrar.call(this, title); // super.editar();
-	}	
+	
 </script>

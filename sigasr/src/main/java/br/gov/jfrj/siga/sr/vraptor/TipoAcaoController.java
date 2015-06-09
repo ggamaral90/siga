@@ -1,5 +1,7 @@
 package br.gov.jfrj.siga.sr.vraptor;
 
+import static br.gov.jfrj.siga.sr.util.SrSigaPermissaoPerfil.ADM_ADMINISTRAR;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,7 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
+import br.gov.jfrj.siga.sr.annotation.AssertAcesso;
 import br.gov.jfrj.siga.sr.dao.SrDao;
 import br.gov.jfrj.siga.sr.model.SrTipoAcao;
 import br.gov.jfrj.siga.sr.validator.SrValidator;
@@ -25,22 +28,12 @@ public class TipoAcaoController extends SrController {
 	}
 
 	//@AssertAcesso(ADM_ADMINISTRAR)
-	@Path("/listar/{mostrarDesativados}")
+	@Path("/listar")
 	public void listar(boolean mostrarDesativados) throws Exception {
 		List<SrTipoAcao> tiposAcao = SrTipoAcao.listar(mostrarDesativados);
 
 		result.include("tiposAcao", tiposAcao);
 		result.include("mostrarDesativados", mostrarDesativados);
-	}
-
-	@Get("/listar")
-	public void listar() throws Exception {
-		result.redirectTo(TipoAcaoController.class).listar(Boolean.FALSE);
-	}
-
-	@Path("/listarDesativados")
-	public void listarDesativados() throws Exception {
-		result.redirectTo(TipoAcaoController.class).listar(Boolean.TRUE);
 	}
 
 	//@AssertAcesso(ADM_ADMINISTRAR)
@@ -69,7 +62,6 @@ public class TipoAcaoController extends SrController {
 		SrTipoAcao tipoAcao = SrTipoAcao.AR.findById(id);
 		tipoAcao.finalizar();
 
-		//result.use(Results.json()).from(tipoAcao).serialize();
 		result.use(Results.http()).body(tipoAcao.toJson());
 	}
 
@@ -90,14 +82,14 @@ public class TipoAcaoController extends SrController {
 	}
 
 	@Path("/buscar")
-	public void buscar(String sigla, String nome) {
+	public void buscar(SrTipoAcao tipoAcao, String nome, String propriedade) {
 		List<SrTipoAcao> itens = null;
 
 		SrTipoAcao filtro = null;
 		try {
-			filtro = new SrTipoAcao();
-			if (temSigla(sigla))
-				filtro.setSigla(sigla);
+			filtro = (null != tipoAcao) ? tipoAcao : new SrTipoAcao();
+			if (temSigla(tipoAcao.getSiglaTipoAcao()))
+				filtro.setSigla(tipoAcao.getSiglaTipoAcao());
 
 			itens = filtro.buscar();
 		} catch (Exception e) {
@@ -105,8 +97,9 @@ public class TipoAcaoController extends SrController {
 		}
 
 		result.include("itens", itens);
-		result.include("filtro", filtro);
+		result.include("tipoAcao", filtro);
 		result.include("nome", nome);
+		result.include("param.propriedade", propriedade);
 	}
 
 	private boolean temSigla(String sigla) {
@@ -115,10 +108,10 @@ public class TipoAcaoController extends SrController {
 
 	private void validarFormEditar(SrTipoAcao acao) {
 		if ("".equals(acao.getSiglaTipoAcao())) {
-			srValidator.addError("siglaAcao", "C&oacute;digo n&atilde;o informado");
+			srValidator.addError("tipoAcao.siglaTipoAcao", "C&oacute;digo n&atilde;o informado");
 		}
 		if ("".equals(acao.getTituloTipoAcao())) {
-			srValidator.addError("tituloAcao", "Titulo n&atilde;o informado");
+			srValidator.addError("tipoAcao.tituloTipoAcao", "Titulo n&atilde;o informado");
 		}
 		if (srValidator.hasErrors()) {
 			enviarErroValidacao();

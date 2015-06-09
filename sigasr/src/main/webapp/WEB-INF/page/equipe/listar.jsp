@@ -2,7 +2,7 @@
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
 
-<siga:pagina titulo="Serviços">
+<siga:pagina titulo="Equipes">
 	
 	<jsp:include page="../main.jsp"></jsp:include>
 	
@@ -27,11 +27,12 @@
 	
 	
 	<div class="gt-bd clearfix">
+	    <input type="hidden" id="lotacaoUsuario" name="lotacaoUsuario" value='${lotacaoUsuario.toJson()}'/>
 		<div class="gt-content">
 			<h2>Pesquisa de Equipes</h2>
 			<!-- content bomex -->
 			<div class="gt-content-box gt-for-table dataTables_div">
-				<table id="equipes_table" border="0" class="gt-table display">
+				<table id="equipes_table" class="gt-table display">
 					<thead>
 						<tr>
 							<th style="font-weight: bold;">Sigla</th>
@@ -81,6 +82,7 @@
 		else {
 			/* Table initialization */
 			opts.dataTable = $('#equipes_table').dataTable({
+				stateSave : true,
 				"language": {
 					"emptyTable":     "Não existem resultados",
 				    "info":           "Mostrando de _START_ a _END_ do total de _TOTAL_ registros",
@@ -129,7 +131,8 @@
 	}
 
 	equipeService.serializar = function(obj) {
-		return BaseService.prototype.serializar.call(this, obj)  + "&" + equipeService.getListasAsString();
+		var serializado = BaseService.prototype.serializar.call(this, obj)  + "&" + equipeService.getListasAsString();
+		return serializado + "&equipe=" + this.getId(obj);
 	}
 	
 	equipeService.getListasAsString = function() {
@@ -145,7 +148,7 @@
 					if (rowValues) {
 						if (rowValues[0] == 0)
 							params += '&excecaoHorarioSet[' + i
-									+ '].dataEspecifica=' + rowValues[1];
+									+ '].strDataEspecifica=' + atualizaData(rowValues[1]).toJSON();
 						else
 							params += '&excecaoHorarioSet[' + i
 									+ '].diaSemana=' + rowValues[0];
@@ -173,12 +176,6 @@
 	equipeService.editar = function(obj, title) {
 		BaseService.prototype.editar.call(this, obj, title); // super.editar();
 		equipeService.atualizarModalEquipe(obj);
-
-		document.getElementsByName('lotacaoEquipeSel.id')[0].value = obj.lotacaoEquipe.id;
-		document.getElementsByName('lotacaoEquipeSel.sigla')[0].value = obj.lotacaoEquipe.sigla;
-		document.getElementsByName('lotacaoEquipeSel.descricao')[0].value = obj.lotacaoEquipe.descricao;
-		document.getElementById('lotacaoSelSpan').innerHTML = obj.lotacaoEquipe.descricao;
-		document.getElementById('equipeHidden').value = equipeService.getId(obj);
 	}
 
 	/**
@@ -187,12 +184,6 @@
 	equipeService.cadastrar = function(title) {
 		BaseService.prototype.cadastrar.call(this, title); // super.editar();
 		equipeService.atualizarModalEquipe();
-
-		document.getElementsByName('lotacaoEquipeSel.id')[0].value = '${lotacaoSel.id}';
-		document.getElementsByName('lotacaoEquipeSel.sigla')[0].value = '${lotacaoSel.sigla}';
-		document.getElementsByName('lotacaoEquipeSel.descricao')[0].value = '${lotacaoSel.descricao}';
-		document.getElementById('lotacaoSelSpan').innerHTML = '${lotacaoSel.descricao}';
-		document.getElementById('equipeHidden').value = equipeService.getId(obj);
 	}
 
 	/**
@@ -262,10 +253,10 @@
 		    if (lotacaoUsuarioValue && lotacaoUsuarioValue != "") {
 				var lota = JSON.parse(lotacaoUsuarioValue);
 				equipeEdicao = {
-					lotacaoEquipe : lota.id,
-					lotacaoEquipe_sigla : lota.descricao,
-					lotacaoEquipeSpan : lota.descricao,
-					lotacaoEquipe_sigla : lota.sigla
+					formulario_lotacaoEquipeSel_id : lota.id,
+					formulario_lotacaoEquipeSel_descricao : lota.descricao,
+					formulario_lotacaoEquipeSel_sigla : lota.sigla,
+					lotacaoEquipeSelSpan : lota.descricao
 				};
 		    }else{
 		    	equipeEdicao = {};

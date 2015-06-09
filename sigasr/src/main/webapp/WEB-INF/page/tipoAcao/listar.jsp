@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
-<siga:pagina titulo="Serviços">
+<siga:pagina titulo="Ações">
 
 	<jsp:include page="../main.jsp"></jsp:include>
 
@@ -112,21 +112,18 @@
 	};
 	
 	$(document).ready(function() {
-		if (QueryString.mostrarDesativados != undefined) {
-			document.getElementById('checkmostrarDesativados').checked = QueryString.mostrarDesativados == 'true';
-			document.getElementById('checkmostrarDesativados').value = QueryString.mostrarDesativados == 'true';
-		}
-			
 		$("#checkmostrarDesativados").click(function() {
 			jQuery.blockUI(objBlock);
+
 			if (document.getElementById('checkmostrarDesativados').checked)
-				location.href = '${linkTo[TipoAcaoController].listarDesativados}';
+				location.href = '${linkTo[TipoAcaoController].listar}' + '?mostrarDesativados=true';
 			else
-				location.href = '${linkTo[TipoAcaoController].listar}';	
+				location.href = '${linkTo[TipoAcaoController].listar}' + '?mostrarDesativados=false';
 		});
 		
 		/* Table initialization */
 		opts.dataTable = $('#tiposAcao_table').dataTable({
+			stateSave : true,
 			"language": {
 				"emptyTable":     "N&atilde;o existem resultados",
 			    "info":           "Mostrando de _START_ a _END_ do total de _TOTAL_ registros",
@@ -169,8 +166,13 @@
 	var tipoAcaoService = new TipoAcaoService(opts);
 	
 	tipoAcaoService.getId = function(tipoAcao) {
-		return tipoAcao.idTipoAcao;
+		return tipoAcao.idTipoAcao || tipoAcao['tipoAcao.idTipoAcao'];
 	}
+
+	tipoAcaoService.serializar = function(obj) {
+        var serializado = BaseService.prototype.serializar.call(this, obj);
+        return serializado + "&tipoAcao=" + this.getId(obj);
+    }
 
 	tipoAcaoService.getRow = function(tipoAcao) {
 		var marginLeft = (tipoAcao.nivel-1) * 2,
@@ -181,8 +183,10 @@
 		spanHTML = spanHTML.replace('{margin-left}', marginLeft + 'em');
 		spanHTML = spanHTML.replace('{font-weight}', fontWeight);
 		spanHTML = spanHTML.replace('{descricao}', tipoAcao.tituloTipoAcao);
-		
-		return [tipoAcao.siglaTipoAcao, spanHTML, tipoAcao.descrTipoAcao, 'COLUNA_ACOES'];
+
+		var descrTipoAcao = tipoAcao.descrTipoAcao == undefined || tipoAcao.descrTipoAcao == null ? "" : tipoAcao.descrTipoAcao;
+	
+		return [tipoAcao.siglaTipoAcao, spanHTML, descrTipoAcao, 'COLUNA_ACOES'];
 	}
 	tipoAcaoService.onRowClick = function(tipoAcao) {
 		tipoAcaoService.editar(tipoAcao, 'Alterar Tipo de A&ccedil;&atilde;o');

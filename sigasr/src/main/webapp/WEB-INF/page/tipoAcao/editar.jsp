@@ -1,16 +1,16 @@
 <div class="gt-form gt-content-box">
 	<form id="tipoAcaoForm">
-		<input type="hidden" name="idTipoAcao">
+		<input type="hidden" name="tipoAcao.idTipoAcao" id="idTipoAcao">
 
 		<div class="gt-form-row gt-width-66">
 			<label>C&oacute;digo<span>*</span></label>
-			<input type="text" name="tipoAcao.siglaTipoAcao" maxlength="255" required/>
+			<input type="text" name="tipoAcao.siglaTipoAcao" id="siglaTipoAcao" maxlength="255" required/>
 		</div>
 		<div class="gt-form-row gt-width-66">
-			<label>T&iacute;tulo <span>*</span></label> <input type="text" name="tipoAcao.tituloTipoAcao" size="100" maxlength="255" required/>
+			<label>T&iacute;tulo <span>*</span></label> <input type="text" id="tituloTipoAcao" name="tipoAcao.tituloTipoAcao" size="100" maxlength="255" required/>
 		</div>
 		<div class="gt-form-row gt-width-66">
-			<label>Descri&ccedil;&atilde;o</label> <input type="text" name="tipoAcao.descrTipoAcao" size="100" maxlength="255"/>
+			<label>Descri&ccedil;&atilde;o</label> <input type="text" id="descrTipoAcao" name="tipoAcao.descrTipoAcao" size="100" maxlength="255"/>
 		</div>
 
 		<div class="gt-form-row">

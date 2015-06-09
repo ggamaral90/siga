@@ -22,6 +22,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import play.db.jpa.JPA;
+import br.gov.jfrj.siga.base.util.Catalogs;
 import br.gov.jfrj.siga.cp.CpTipoConfiguracao;
 import br.gov.jfrj.siga.dp.DpLotacao;
 import br.gov.jfrj.siga.dp.DpPessoa;
@@ -32,7 +33,7 @@ import br.gov.jfrj.siga.sr.util.AtualizacaoLista;
 import br.gov.jfrj.siga.vraptor.entity.HistoricoSuporteVraptor;
 
 @Entity
-@Table(name = "SR_LISTA", schema = "SIGASR")
+@Table(name = "SR_LISTA", schema = Catalogs.SIGASR)
 public class SrLista extends HistoricoSuporteVraptor {
 	/**
 	 *
@@ -65,7 +66,7 @@ public class SrLista extends HistoricoSuporteVraptor {
 	}
 
 	@Id
-	@SequenceGenerator(sequenceName = "SIGASR.SR_LISTA_SEQ", name = "srListaSeq")
+	@SequenceGenerator(sequenceName = Catalogs.SIGASR +".SR_LISTA_SEQ", name = "srListaSeq")
 	@GeneratedValue(generator = "srListaSeq")
 	@Column(name = "ID_LISTA")
 	public Long idLista;
@@ -247,7 +248,7 @@ public class SrLista extends HistoricoSuporteVraptor {
 		for (int i = 0; i <= prioridades.size() - 1; i++) {
 			SrPrioridadeSolicitacao prioridadeSolic = prioridades.get(i);
 			if(prioridadeSolicitacao.getPrioridade() != null) {
-				if (prioridadeSolic.getPrioridade() == null || prioridadeSolicitacao.getPrioridade().idPrioridade > prioridadeSolic.getPrioridade().idPrioridade) {
+				if (prioridadeSolic.getPrioridade() == null || prioridadeSolicitacao.getPrioridade().getIdPrioridade() > prioridadeSolic.getPrioridade().getIdPrioridade()) {
 					return prioridadeSolic.getNumPosicao();
 				}
 			}

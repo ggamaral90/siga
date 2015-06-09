@@ -1,6 +1,8 @@
-<%@ tag body-content="scriptless"%>
+<%@ tag body-content="empty"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
+<%@ taglib uri="http://localhost/libstag" prefix="f"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <%@ attribute name="orgaos" required="false"%>
 <%@ attribute name="locais" required="false"%>
@@ -10,7 +12,6 @@
 <%@ attribute name="designacoes" required="false"%>
 <%@ attribute name="modoExibicao" required="false"%>
 <%@ attribute name="mostrarDesativados" required="false"%>
-
 
 <div class="gt-content">
 	<!-- content bomex -->
@@ -24,7 +25,7 @@
 			</div>
 		</c:if>
 
-		<table id="designacoes_table" border="0" class="gt-table display">
+		<table id="designacoes_table" class="gt-table display">
 			<thead>
 				<tr>
 					<th style="color: #333">
@@ -38,7 +39,7 @@
 					<th>Descri&ccedil;&atilde;o</th>
 					<th>Atendente</th>
 					<th>A&ccedil;&otilde;es</th>
-					<th>JSon - Designa&ccedil;&atilde;o</th>
+					<th style="display:none;">JSon - Designa&ccedil;&atilde;o</th>
 					<th>Checkbox Heran&ccedil;a</th>
 					<th>Herdado</th>
 					<th>Utilizar Herdado</th>
@@ -47,6 +48,7 @@
 			<tbody>
 				<c:forEach items="${requestScope[designacoes]}" var="design">
 					<tr data-json-id="${design.id}" data-json='${design.toVO().toJson()}'
+						onclick="designacaoService.editar($(this).data('json'), 'Alterar Designação')"
 						style="cursor: pointer;">
 						<td class="gt-celula-nowrap details-control" style="text-align: center;">+</td>
 						<td>${design.orgaoUsuario != null ? design.orgaoUsuario.acronimoOrgaoUsu : ""}</td>
@@ -60,7 +62,7 @@
 								<img src="/siga/css/famfamfam/icons/application_double.png" style="margin-right: 5px;"> 
 							</a>
 						</td>
-						<td>${design.getSrConfiguracaoJson()}</td>
+						<td style="display:none;">${design.getSrConfiguracaoJson()}</td>
 						<td class="checkbox-hidden"
 							style="width: 25px !important; padding-left: 5px; padding-right: 5px;">
 							<input type="checkbox" checked="${design.utilizarItemHerdado}"
@@ -79,34 +81,28 @@
 	</div>
 </div>
 
-<siga:modal nome="designacao" titulo="Cadastrar Designacao">
+<style>
+#sortable ul {
+        height: 1.5em;
+        line-height: 1.2em;
+}
+
+.ui-state-highlight {
+        height: 1.5em;
+        line-height: 1.2em;
+}
+</style>
+<siga:modal nome="designacao" titulo="Cadastrar Designação">
 	<div id="divEditarDesignacaoItem">
-	
-		<style>
-		#sortable ul {
-		        height: 1.5em;
-		        line-height: 1.2em;
-		}
-		
-		.ui-state-highlight {
-		        height: 1.5em;
-		        line-height: 1.2em;
-		}
-		</style>
 		<div class="gt-form gt-content-box" style="width: 800px !important; max-width: 800px !important;">
 			<form id="formDesignacao">
-				<input type="hidden" id="idConfiguracao" name="idConfiguracao" value="${idConfiguracao}" />
-				<input type="hidden" id="hisIdIni" name="hisIdIni" value="${hisIdIni}" />
+				<input type="hidden" id="designacao" name="designacao" value="" />
+				<input type="hidden" id="idConfiguracao" name="designacao.idConfiguracao" value="${idConfiguracao}" />
+				<input type="hidden" id="hisIdIni" name="designacao.hisIdIni" value="${hisIdIni}" />
 				<div>
 					<div class="gt-form-row">
 						<label>Descri&ccedil;&atilde;o <span>*</span></label>
-						<input id="descrConfiguracao"
-							   type="text"
-							   name="descrConfiguracao"
-							   value="${descrConfiguracao}"
-							   maxlength="255"
-							   style="width: 791px;"
-							   required/>
+						<input id="descrConfiguracao" type="text" name="designacao.descrConfiguracao" value="${descrConfiguracao}" maxlength="255" style="width: 791px;" required/>
 						<span style="display:none;color: red" id="designacao.descrConfiguracao">Descri&ccedil;&atilde;o n&atilde;o informada.</span>
 					</div>
 					<div class="gt-form-row box-wrapper">
@@ -128,34 +124,39 @@
 						</div>
 						<div class="box gt-width-50">
 							<label>&Oacute;rg&atilde;o</label>
-							<siga:select name="orgaoUsuario" list="orgaos" listKey="idOrgaoUsu" listValue="nmOrgaoUsu" value="${orgaoUsuario.idOrgaoUsu}" headerKey="0" headerValue="Nenhum"/>
+							<siga:select id="orgaoUsuario" name="orgaoUsuario" list="orgaos" listKey="idOrgaoUsu" listValue="nmOrgaoUsu" value="${orgaoUsuario.idOrgaoUsu}" headerKey="0" headerValue="Nenhum"/>
 						</div>
 					</div>
+					<input type="hidden" id="designacao.lotacao" name="designacao.lotacao" />
+					<input type="hidden" id="designacao.dpPessoa" name="designacao.dpPessoa" />
+					<input type="hidden" id="designacao.funcaoConfianca" name="designacao.funcaoConfianca" />
+					<input type="hidden" id="designacao.cargo" name="designacao.cargo" />
+					<input type="hidden" id="designacao.cpGrupo" name="designacao.cpGrupo" />
+					<input type="hidden" id="designacao.complexo" name="designacao.complexo" />
+					<input type="hidden" id="designacao.orgaoUsuario" name="designacao.orgaoUsuario" />
+					<input type="hidden" name="designacao.atendente" id="designacao.atendente">
 		
 					<div class="gt-form-row box-wrapper">
 						<div class="box box-left gt-width-50">
 							<label>Local</label>
-							<siga:select name="complexo" list="locais" listKey="idComplexo" listValue="nomeComplexo" value="${complexo.idComplexo}" headerKey="0" headerValue="Nenhum"/>
+							<siga:select id="complexo" name="complexo" list="locais" listKey="idComplexo" listValue="nomeComplexo" value="${complexo.idComplexo}" headerKey="0" headerValue="Nenhum"/>
 						</div>
 						<div class="box gt-width-50">
 							<label>Atendente <span>*</span></label>
 							
-							<siga:selecao tipo="lotacao" propriedade="lotacao" tema="simple" modulo="siga" urlAcao="buscar" inputName="atendente"/>
-							
-		<%-- 					#{selecao --%>
-		<%-- 						tipo:'lotacao', nome:'atendente', value:atendente?.lotacaoAtual, --%>
-		<%-- 						disabled:_modoExibicao == 'equipe' ? 'true' : disabled /} --%>
+							<input type="hidden" name="atendente" id="atendente" class="selecao">
+							<siga:selecao propriedade="lotacao" tema="simple" modulo="siga" urlAcao="buscar" inputName="atendente" desativar="${requestScope[modoExibicao] == 'equipe' ? 'true' : disabled}"/>
 		
 							<span style="display:none;color: red" id="designacao.atendente">Atendente n&atilde;o informado;</span>
 						</div>
 					</div>
-					<siga:configuracaoItemAcao itemConfiguracaoSet="${itemConfiguracaoSet}" acoesSet="${acoesSet}"></siga:configuracaoItemAcao>
+					<siga:configuracaoItemAcao itemConfiguracaoSet="${itemConfiguracaoSet}" acoesSet="${acoesSet}"/>
 		
 					<div class="gt-form-row">
 						<div class="gt-form-row">
-							<input type="button" value="Gravar" class="gt-btn-medium gt-btn-left" onclick="designacaoService.gravar()"/>
+							<input type="button" value="Gravar" class="gt-btn-medium gt-btn-left" onclick="preparaObjeto();designacaoService.gravar()"/>
 							<a class="gt-btn-medium gt-btn-left" onclick="designacaoService.cancelarGravacao()">Cancelar</a>
-							<input type="button" value="Aplicar" class="gt-btn-medium gt-btn-left" onclick="designacaoService.aplicar()"/>
+							<input type="button" value="Aplicar" class="gt-btn-medium gt-btn-left" onclick="preparaObjeto();designacaoService.aplicar()"/>
 						</div>
 					</div>
 		
@@ -198,9 +199,30 @@
 	colunasDesignacao.checkBoxHeranca = 			8;
 	colunasDesignacao.herdado= 						9;
 	colunasDesignacao.utilizarHerdado= 				10;
-	
-	var mostrarDesativados = window.QueryString ? QueryString.mostrarDesativados : false,
+
+	var preparaObjeto = function() {
+		var solicitanteTypes = ["lotacao", "dpPessoa", "funcaoConfianca", "cargo", "cpGrupo"];
+		
+		solicitanteTypes.forEach(function(entry) {
+			var inputName = entry + "Sel.id";
+			var inputValue = $( "input[name='" + inputName + "']" ).val();
+		    if(inputValue != "")
+			    $("input[name='designacao." + entry + "']" ).val(inputValue);
+		});
+
+		var orgaoUsuarioValue = $('#orgaoUsuario').find(":selected").val();
+		if(orgaoUsuarioValue != "") 
+		    $("input[name='designacao.orgaoUsuario']").val(orgaoUsuarioValue);
 			
+		var complexoValue = $('#complexo').find(":selected").val();
+		if(complexoValue != "")
+		    $("input[name='designacao.complexo']").val(complexoValue);
+
+		var atendenteValue =$( "input[name='atendenteSel.id']" ).val();
+		if(atendenteValue != "") 
+		    $("input[name='designacao.atendente']").val(atendenteValue);
+	}
+	
 	designacaoOpts = {
 		 urlDesativar : '${linkTo[DesignacaoController].desativar}',
 		 urlReativar : '${linkTo[DesignacaoController].reativar}',
@@ -224,6 +246,8 @@
 	var designacaoService = new DesignacaoService(designacaoOpts);
 	// Sobescreve o metodo cadastrar para limpar a tela
 	designacaoService.cadastrar = function(title) {
+		document.getElementById("atendenteSelSpan").innerHTML = "";
+		document.getElementById("dpPessoaSelSpan").innerHTML = "";
 		BaseService.prototype.cadastrar.call(this, title);
 		// atualiza os dados da DesignaÃƒÂ§ÃƒÂ£o
 		atualizarDesignacaoEdicao();
@@ -231,7 +255,7 @@
 
 	designacaoService.getId = function(designacao) {
 		if (designacao)
-			return designacao.idConfiguracao;
+			return designacao.idConfiguracao || designacao["designacao.idConfiguracao"];
 		else
 			return;
 	}
@@ -241,22 +265,24 @@
 				designacao.orgaoUsuario != null ? designacao.orgaoUsuario.sigla : ' ',
 				designacao.complexo != null ? designacao.complexo.descricao : ' ',
 				designacao.solicitante != null ? designacao.solicitante.sigla : ' ',
-				designacao.descrConfiguracao,
+				designacao.descrConfiguracao != null ? designacao.descrConfiguracao : '',
 				designacao.atendente != null ? designacao.atendente.sigla : '',
 				'COLUNA_ACOES',
 				JSON.stringify(designacao),
 				' ',
-				designacao.isHerdado,
+				designacao.herdado,
 				designacao.utilizarItemHerdado];
 	}
 	
 	designacaoService.onRowClick = function(designacao) {
-		designacaoService.editar(designacao, 'Alterar designacao');
+		designacaoService.editar(designacao, 'Alterar designação');
 	}
 	/**
 	 * Customiza o metodo editar
 	 */
 	designacaoService.editar = function(obj, title) {
+		document.getElementById("atendenteSelSpan").innerHTML = "";
+        document.getElementById("dpPessoaSelSpan").innerHTML = "";
 		BaseService.prototype.editar.call(this, obj, title); // super.editar();
 		// atualiza as listas
 		atualizarDesignacaoEdicao(obj);
@@ -328,7 +354,7 @@
 	}
 	
 	function camposObrigatoriosPreenchidos() {
-		if (possuiValor($("#formulario_atendente_lotacaoSel_id")))
+		if (possuiValor($("#formulario_atendenteSel_id")))
 			return true;
 		else {
 			alert("Por favor preencha pelo menos um dos seguintes campos: Atendente")
@@ -336,10 +362,15 @@
 		}
 	}
 
-	designacaoService.populateFromJSonList = function(listaJSon) {
+	designacaoService.reset = function() {
 		if(designacaoService.designacaoTable) {
 			designacaoService.designacaoTable.destruir();
 		}
+	}
+
+	designacaoService.populateFromJSonList = function(listaJSon) {
+		designacaoService.reset();
+		
 		var table = designacaoOpts.tabelaRegistros;
 		
 		for (var i = 0; i < listaJSon.length; i++) {
@@ -383,7 +414,7 @@
 
 		tr.on('click', function() {
 			var json = $(this).data('json');
-			designacaoService.editar(json, 'Alterar designacao');
+			designacaoService.editar(json, 'Alterar designação');
 		});
 
 		new DesativarReativar(this)
@@ -403,7 +434,7 @@
 		var acoes = tr.find('td.acoes');
 
 		// tratamentos de heranÃƒÂ§a e botÃƒÂ£o duplicar
-		if (designacao && (designacao.isHerdado == 'true' || designacao.isHerdado == true))
+		if (designacao && (designacao.herdado == 'true' || designacao.herdado == true))
 			$('td', tr).addClass('configuracao-herdada');
 		else
 			acoes = acoes.append(" " + designacaoService.duplicarButton);
@@ -416,7 +447,7 @@
 	function duplicarDesignacao(event) {
 		var tr = $(event.currentTarget).parent().parent();
 		event.stopPropagation();
-		designacaoService.editar(tr.data('json'), 'Duplicar DesignaÃƒÂ§ÃƒÂ£o');
+		designacaoService.editar(tr.data('json'), "Duplicar Designação");
 		resetId();
 	}
 

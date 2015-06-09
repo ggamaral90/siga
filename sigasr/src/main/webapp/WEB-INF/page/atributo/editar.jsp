@@ -28,7 +28,7 @@
 		</div>
 		<div class="gt-form-row gt-width-66">
 			<label>Objetivo do atributo<span>*</span></label>
-			<select id="objetivoAtributo" name="idObjetivo" class="select-siga" style="width:393px;" onchange="javascript:ocultaAssociacoes();">
+			<select id="objetivoAtributo" name="atributo.objetivoAtributo" class="select-siga" style="width:393px;" onchange="javascript:ocultaAssociacoes();">
 				<c:forEach items="${objetivos}" var="objetivo">
 					<option value="${objetivo.idObjetivo}">${objetivo.descrObjetivo}</option>
 				</c:forEach>
@@ -115,11 +115,6 @@
 			return value == 'true';
 		else
 			return value;
-	}
-
-	function getAtributoObrigatorioString() {
-		var isChecked = $("#checkatributoObrigatorio")[0].checked;
-		return isChecked ? "Sim": "Não";
 	}
 	
 	associacaoService.verificarTipoAtributo = function() {

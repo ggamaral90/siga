@@ -12,7 +12,7 @@
 		<label>Itens de Configuração</label>
 		<!-- content bomex -->
 		<div class="gt-content-box dataTables_div">
-			<table id="itemConfiguracao_table" border="0" class="gt-table-nowrap display">
+			<table id="itemConfiguracao_table" class="gt-table-nowrap display">
 				<thead>
 					<tr>
 						<th>ID</th>
@@ -48,7 +48,7 @@
 		<label>Ações</label>
 		<!-- content bomex -->
 		<div class="gt-content-box dataTables_div">
-			<table id="acao_table" border="0" class="gt-table display">
+			<table id="acao_table" class="gt-table display">
 				<thead>
 					<tr>
 						<th>ID</th>
@@ -79,11 +79,8 @@
 <siga:modal nome="itemConfiguracao" titulo="Adicionar Item de Configuração">
 	<script>
 	//Edson: esta funcao evita que o usuario de ok sem a busca por ajax ter terminado
-	function bloqueiaItemOk(){
-		$("#modalItemOk").attr("disabled", "disabled");
-	}
 	function bloqueiaItemOkSeVazio(){
-		if ($("#itemConfiguracao").val() && $("#itemConfiguracao_sigla").val() && $("#itemConfiguracaoSpan").text())
+		if ($("#formulario_itemConfiguracao_id").val() && $("#formulario_itemConfiguracao_sigla").val() && $("#itemConfiguracaoSpan").text())
 			$("#modalItemOk").removeAttr('disabled');
 		else 
 			$("#modalItemOk").attr("disabled", "disabled");
@@ -94,10 +91,8 @@
 			<div class="gt-form gt-content-box">
 				<div class="gt-form-row">
 					<div class="gt-form-row">
-						<label>Item de Configuração</label> 
-<%-- 						#{selecao tipo:'item', --%>
-<%-- 							nome:'itemConfiguracao', --%>
-<%-- 							value:itemConfiguracao?.atual, onblur:'bloqueiaItemOk();', onchange:'bloqueiaItemOkSeVazio();' /} --%>
+						<label>Item de Configuração</label>
+						<siga:selecao2 propriedade="itemConfiguracao" tipo="itemConfiguracao" tema="simple" modulo="sigasr" onchange="bloqueiaItemOkSeVazio()"/>
 						<span style="display:none;color: red" id="designacao.itemConfiguracao">Item de Configuração não informado.</span>
 					</div>
 					<div class="gt-form-row">
@@ -113,11 +108,8 @@
 <siga:modal nome="acao" titulo="Adicionar Ação">
 	<script>
 	//Edson: esta funcao evita que o usuario de ok sem a busca por ajax ter terminado
-	function bloqueiaAcaoOk() {
-		$("#modalAcaoOk").attr("disabled", "disabled");
-	}
 	function bloqueiaAcaoOkSeVazio() {
-		if ($("#acao").val() && $("#acao_sigla").val() && $("#acaoSpan").text())
+		if ($("#formulario_acao_id").val() && $("#formulario_acao_sigla").val() && $("#acaoSpan").text())
 			$("#modalAcaoOk").removeAttr('disabled');
 		else 
 			$("#modalAcaoOk").attr("disabled", "disabled");
@@ -129,8 +121,7 @@
 				<div class="gt-form-row">
 					<div class="gt-form-row">
 						<label>Ação</label> 
-<%-- 						#{selecao tipo:'acao', --%>
-<%-- 							nome:'acao', value:acao?.atual, onblur:'bloqueiaAcaoOk();', onchange:'bloqueiaAcaoOkSeVazio();' /} --%>
+						<siga:selecao2 propriedade="acao" tipo="acao" tema="simple" modulo="sigasr" onchange="bloqueiaAcaoOkSeVazio()"/>
 						<span style="display:none;color: red" id="designacao.acao">Ação não informada.</span>
 					</div>
 					<div class="gt-form-row">
@@ -153,7 +144,7 @@
 	    $('#acao_table tbody').on( 'click', 'a.acao_remove', function () {
 	    	configuracaoItemAcaoService.acaoTable.api().row($(this).closest('tr')).remove().draw(false);
 	    } );
-	
+
 	});
 
 	/**
@@ -194,28 +185,40 @@
 			"aLengthMenu": [3, 10, 25, 50, 100]
 		});
 	}
+
+	configuracaoItemAcaoService.limparItemConfiguracao = function() {
+		// limpando campos do componente de busca
+		$("#formulario_itemConfiguracao_id").val('');
+		$("#formulario_itemConfiguracao_descricao").val('');
+		$("#formulario_itemConfiguracao_sigla").val('');
+		$("#itemConfiguracaoSpan").html('');
+	}
+
+	configuracaoItemAcaoService.limparAcao = function() {
+		$("#formulario_acao_id").val('');
+		$("#formulario_acao_descricao").val('');
+		$("#formulario_acao_sigla").val('');
+		$("#acaoSpan").html('');
+	}
+	
 	configuracaoItemAcaoService.inserirItemConfiguracao = function() {
-		var idSelecionado = $("#itemConfiguracao").val();
+		var idSelecionado = $("#formulario_itemConfiguracao_id").val();
 		
 		if (idSelecionado == undefined || idSelecionado == '') {
 			alert("Por favor, selecione um item de configuração antes de continuar, ou clique em Cancelar.");
 			return;
 		}
 		if(configuracaoItemAcaoService.podeAdicionarItem(idSelecionado)) {
-			var row = [	$("#itemConfiguracao").val(),
-			           	$("#itemConfiguracao_sigla").val(),
-			           	$("#itemConfiguracao_descricao").val(),
-			           	$("#itemConfiguracao_descricao").val(),
+			var row = [	$("#formulario_itemConfiguracao_id").val(),
+			           	$("#formulario_itemConfiguracao_sigla").val(),
+			           	$("#formulario_itemConfiguracao_descricao").val(),
+			           	$("#formulario_itemConfiguracao_descricao").val(),
 			           	"",
 			           	"<a class=\"itemConfiguracao_remove\"><img src=\"/siga/css/famfamfam/icons/delete.png\" style=\"visibility: inline; cursor: pointer\" /></a>"];
 			
 			this.itemConfiguracaoTable.api().row.add(row).draw();
 	        			
-			// limpando campos do componente de busca
-			$("#itemConfiguracao").val('');
-			$("#itemConfiguracao_descricao").val('');
-			$("#itemConfiguracao_sigla").val('');
-			$("#itemConfiguracaoSpan").html('');
+			configuracaoItemAcaoService.limparItemConfiguracao();
 			
 			configuracaoItemAcaoService.modalFechar('itemConfiguracao');
 		} 
@@ -273,25 +276,22 @@
 	    } );
 	}
 	configuracaoItemAcaoService.inserirAcao = function() {
-		var idSelecionado = $("#acao").val();
+		var idSelecionado = $("#formulario_acao_id").val();
 		
 		if (idSelecionado == undefined || idSelecionado == '') {
 			alert("Por favor, selecione uma ação antes de continuar, ou clique em Cancelar.");
 			return;
 		}
 		if(configuracaoItemAcaoService.podeAdicionarAcao(idSelecionado)) {
-			var row = [	$("#acao").val(),
-	        			$("#acao_sigla").val(),
-	        			$("#acao_descricao").val(),
+			var row = [	$("#formulario_acao_id").val(),
+	        			$("#formulario_acao_sigla").val(),
+	        			$("#formulario_acao_descricao").val(),
 	        			"<a class=\"acao_remove\"><img src=\"/siga/css/famfamfam/icons/delete.png\" style=\"visibility: inline; cursor: pointer\" /></a>"];
 			
 			this.acaoTable.api().row.add(row).draw();
 			
 			// limpando campos do componente de busca
-			$("#acao").val('');
-			$("#acao_descricao").val('');
-			$("#acao_sigla").val('');
-			$("#acaoSpan").html('');
+			configuracaoItemAcaoService.limparAcao();
 			
 			configuracaoItemAcaoService.modalFechar('acao');
 		}
@@ -300,6 +300,8 @@
     
 	configuracaoItemAcaoService.modalAbrir = function(componentId) {
 		$("#" + componentId + "_dialog").dialog('open');
+		configuracaoItemAcaoService.limparItemConfiguracao();
+		configuracaoItemAcaoService.limparAcao();
 	}
 	
 	configuracaoItemAcaoService.modalFechar = function(componentId) {
@@ -307,9 +309,7 @@
 	}
 	
 	configuracaoItemAcaoService.getItemAcaoAsString = function(objectName) {
-		var params = '',
-			hasItem = false,
-			hasAcao = false;
+		var params = '';
 		
 		// Percorre lista de Itens de ConfiguraÃƒÂ§ÃƒÂ£o
 		this.itemConfiguracaoTable.api().rows().indexes().each(function (i) {
@@ -317,18 +317,9 @@
 			
 			// Atualiza a string serializada
 			if (rowValues) {
-	        	params 	+= '&itemConfiguracaoSet[' + i + ']=' + rowValues[0]
-	        			+  '&itemConfiguracaoSet[' + i + '].idItemConfiguracao=' + rowValues[0]
-	        	       	+  '&itemConfiguracaoSet[' + i + '].siglaItemConfiguracao=' + rowValues[1]
-     	       		   	+  '&itemConfiguracaoSet[' + i + '].tituloItemConfiguracao=' + rowValues[2]
-	        			+  '&itemConfiguracaoSet[' + i + '].descrItemConfiguracao=' + rowValues[3]
-	        			+  '&itemConfiguracaoSet[' + i + '].descricaoSimilaridade=' + rowValues[4];
-	        	hasValue = true;
+	        	params 	+= '&itemConfiguracaoSet[' + i + ']=' + rowValues[0];
 			}
 		});
-
-// 		if (!hasItem)
-// 			params += '&itemConfiguracaoSet=';
 		
 		// Percorre lista de AÃƒÂ§ÃƒÂµes
 		this.acaoTable.api().rows().indexes().each(function (i) {
@@ -336,16 +327,9 @@
 			
 			// Atualiza a string serializada
 			if (rowValues) {
-				params 	+= '&acoesSet[' + i + ']=' + rowValues[0]
-						+  '&acoesSet[' + i + '].idAcao=' + rowValues[0]
-						+  '&acoesSet[' + i + '].siglaAcao=' + rowValues[1]
-						+  '&acoesSet[' + i + '].tituloAcao=' + rowValues[2];
-				hasAcao = true;
+				params 	+= '&acoesSet[' + i + ']=' + rowValues[0];
 			}
 		});
-
-// 		if (!hasAcao)
-// 			params += '&acoesSet=';
 		
 		return params;
 	}

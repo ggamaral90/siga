@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
-<siga:pagina titulo="Itens de ConfiguraÃ§Ã£o">
+<siga:pagina titulo="Designação de Solicitações">
 
 	<jsp:include page="../main.jsp"></jsp:include>
 	
@@ -13,6 +13,7 @@
 	<script src="/sigasr/javascripts/jquery.maskedinput.min.js"></script>
 	<script src="/sigasr/javascripts/detalhe-tabela.js"></script>
 	<script src="/sigasr/javascripts/base-service.js"></script>
+	<script src="/sigasr/javascripts/jquery.blockUI.js"></script>
 	<script src="/sigasr/javascripts/jquery.validate.min.js"></script>
 	<script src="/sigasr/javascripts/language/messages_pt_BR.min.js"></script>
 
@@ -56,7 +57,7 @@
 	
 	<div class="gt-bd clearfix">
 		<div class="gt-content">
-			<h2>Itens de ConfiguraÃ§Ã£o</h2>
+			<h2>Itens de Configuração</h2>
 			<!-- content bomex -->
 			<div class="gt-content-box dataTables_div">
 				<div class="gt-form-row dataTables_length">
@@ -65,7 +66,7 @@
 						<b>Incluir Inativas</b>
 					</label>
 				</div>
-				<table id="itens_configuracao_table" border="0" class="gt-table display">
+				<table id="itens_configuracao_table" class="gt-table display">
 					<thead>
 						<tr>
 							<th style="color: #333" class="hide-sort-arrow">
@@ -73,19 +74,19 @@
 									<span id="iconeBotaoExpandirTodos">+</span>
 								</button>
 							</th>
-							<th>CÃ³digo</th>
-							<th>TÃ­tulo</th>
-							<th>DescriÃ§Ã£o</th>
+							<th>Código</th>
+							<th>Título</th>
+							<th>Descrição</th>
 							<th>Similaridade</th>
 							<th></th>
-							<th>VO Item</th>
+							<th style="display: none;">VO Item</th>
 						</tr>
 					</thead>
 	
 					<tbody>
 						<c:forEach items="${itens}" var="item">
-							<tr data-json-id="${item.idItemConfiguracao}" data-json="${item.toVO().toJson()}" 
-								onclick="itemConfiguracaoService.editar($(this).data('json'), 'Alterar item de configuraÃ§Ã£o')"
+							<tr data-json-id="${item.idItemConfiguracao}" data-json='${item.toVO().toJson()}' 
+								onclick="itemConfiguracaoService.editar($(this).data('json'), 'Alterar item de configuração')"
 								style="cursor: pointer;">
 								<td class="gt-celula-nowrap details-control" style="text-align: center;">+</td>
 								<td>${item.siglaItemConfiguracao}</td>
@@ -95,7 +96,7 @@
 								<td class="acoes">
 									<siga:desativarReativar id="${item.idItemConfiguracao}" onReativar="itemConfiguracaoService.reativar" onDesativar="itemConfiguracaoService.desativar" isAtivo="${item.isAtivo()}"></siga:desativarReativar>
 								</td>
-								<td>${item.srItemConfiguracaoJson}</td>
+								<td style="display: none;">${item.srItemConfiguracaoJson}</td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -148,15 +149,22 @@
 		return query_string;
 	}();
 
-	if (QueryString.mostrarDesativados != undefined) {
-		document.getElementById('checkmostrarDesativado').checked = QueryString.mostrarDesativados == 'true';
-		document.getElementById('checkmostrarDesativado').value = QueryString.mostrarDesativados == 'true';
-	}
-		
-	$("#checkmostrarDesativado").click(function() {
-		jQuery.blockUI(objBlock);
-		${linkTo[ItemConfiguracaoController].listar[document.getElementById('checkmostrarDesativado').checked]};
+	jQuery(document).ready(function($) {
+		if (QueryString.mostrarDesativados != undefined) {
+			document.getElementById('checkmostrarDesativados').checked = QueryString.mostrarDesativados == 'true';
+			document.getElementById('checkmostrarDesativados').value = QueryString.mostrarDesativados == 'true';
+		}
+			
+		$("#checkmostrarDesativados").click(function() {
+			jQuery.blockUI(objBlock);
+			
+			if (document.getElementById('checkmostrarDesativados').checked)
+				location.href = '${linkTo[ItemConfiguracaoController].listar}' + '?mostrarDesativados=true';
+			else
+				location.href = '${linkTo[ItemConfiguracaoController].listar}' + '?mostrarDesativados=false';
+		});
 	});
+	
 
 	var itemTable = new SigaTable('#itens_configuracao_table')
 		.configurar("aaSorting", [[colunasLista.codigo, 'asc']])
@@ -220,14 +228,19 @@
 	var itemConfiguracaoService = new ItemConfiguracaoService(optsLista);
 	
 	itemConfiguracaoService.getId = function(itemConfiguracao) {
-		return itemConfiguracao.id;
+		return itemConfiguracao['itemConfiguracao.idItemConfiguracao'] || itemConfiguracao['idItemConfiguracao'] || '';
 	}
 	itemConfiguracaoService.getIdEdicao = function() {
 		return $('#idItemConfiguracao').val();
 	}
 	itemConfiguracaoService.getRow = function(itemConfiguracao) {
-		return ['', itemConfiguracao.siglaItemConfiguracao, itemConfiguracao.tituloItemConfiguracao,
-				itemConfiguracao.descrItemConfiguracao, itemConfiguracao.descricaoSimilaridade, 'COLUNA_ACOES', itemConfiguracao];
+		return ['', 
+				itemConfiguracao.siglaItemConfiguracao, 
+				itemConfiguracao.tituloItemConfiguracao,
+				itemConfiguracao.descrItemConfiguracao,
+				itemConfiguracao.descricaoSimilaridade,
+				'COLUNA_ACOES',
+				itemConfiguracao];
 	}
 
 	itemConfiguracaoService.onRowClick = function(item) {
@@ -246,8 +259,8 @@
 	itemConfiguracaoService.editar = function(obj, title) {
 		BaseService.prototype.editar.call(this, obj, title); // super.editar();
 		atualizarModalItem(obj);
-		// carrega as designaÃ§Ãµes do item
-		carregarDesignacoes(obj.id);
+		// carrega as designaÃƒÂ§ÃƒÂµes do item
+		carregarDesignacoes(this.getId(obj));
 	}
 
 	/**
@@ -260,7 +273,7 @@
 	}
 
 	itemConfiguracaoService.serializar = function(obj) {
-		return BaseService.prototype.serializar.call(this, obj)  + "&" + itemConfiguracaoService.getListasAsString();
+		return BaseService.prototype.serializar.call(this, obj)  + "&" + itemConfiguracaoService.getListasAsString() + "&itemConfiguracao=" + this.getId(obj);
 	}
 
 	itemConfiguracaoService.getListasAsString = function() {
@@ -271,9 +284,9 @@
             	tipo = jDivs[0].id;
             
             if(tipo === 'pessoa'){
-            	params += '&itemConfiguracao.gestorSet[' + i + '].dpPessoa.idPessoa=' + jDivs[1].id;
+            	params += '&gestorSet[' + i + '].dpPessoa.idPessoa=' + jDivs[1].id;
             } else if (tipo === 'lotacao') {
-            	params += '&itemConfiguracao.gestorSet[' + i + '].dpLotacao.idLotacao=' + jDivs[1].id;
+            	params += '&gestorSet[' + i + '].dpLotacao.idLotacao=' + jDivs[1].id;
             }                            
         });
         $("#fatoresUl").find("li").each(function(i){
@@ -281,36 +294,37 @@
             	tipoF = jDivsF[0].id;
         	
             if(tipoF === 'pessoa') {
-                params += '&itemConfiguracao.fatorMultiplicacaoSet[' + i + '].dpPessoa.idPessoa=' + jDivsF[1].id;
+                params += '&fatorMultiplicacaoSet[' + i + '].dpPessoa.idPessoa=' + jDivsF[1].id;
             } else if (tipoF === 'lotacao') {
-                params += '&itemConfiguracao.fatorMultiplicacaoSet[' + i + '].dpLotacao.idLotacao=' + jDivsF[1].id;
+                params += '&fatorMultiplicacaoSet[' + i + '].dpLotacao.idLotacao=' + jDivsF[1].id;
             }
 
-            params += '&itemConfiguracao.fatorMultiplicacaoSet[' + i + '].numFatorMultiplicacao=' + parseInt(jDivsF[1].innerHTML.replace(" / Fator: ", ""));
+            params += '&fatorMultiplicacaoSet[' + i + '].numFatorMultiplicacao=' + parseInt(jDivsF[1].innerHTML.replace(" / Fator: ", ""));
    	 	});
 
         return params;
     }
 
 	function carregarDesignacoes(id) {
+		designacaoService.reset();
+		
         $.ajax({
         	type: "GET",
-        	url: "${linkTo[ItemConfiguracaoController].buscarDesignacoes}",
-        	data: id,
+        	url: "/sigasr/app/itemConfiguracao/" + id + "/designacoes",
         	dataType: "text",
         	success: function(lista) {
         		var listaJSon = JSON.parse(lista);
         		designacaoService.populateFromJSonList(listaJSon);
         	},
         	error: function(error) {
-            	alert("NÃ£o foi possÃ­vel carregar as DesignaÃ§Ãµes deste item.");
+            	alert("Não foi possível carregar as Designações deste item.");
         	}
        	});
     }
 
 	function detalhesItemConfiguracaoFormat( d, obj) {
 		var tr = obj.ativo == true ? $('<tr class="detail">') : $('<tr class="detail configuracao-herdada">'),
-			detailHTML = '<td colspan="6"><table class="datatable" cellpadding="5" cellspacing="0" border="0" style="margin-left:56px;">'+
+			detailHTML = '<td colspan="6"><table class="datatable" cellpadding="5" cellspacing="0" style="margin-left:56px;">'+
 			'<tr>'+
 				'<td style="padding-right: 0px;"><b>Similaridade:</b></td>'+
 					'<td style="padding-left: 5px;">' + (obj.descricaoSimilaridade || "") + '</td>'+

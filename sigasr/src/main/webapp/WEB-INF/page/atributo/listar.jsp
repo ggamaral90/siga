@@ -2,7 +2,7 @@
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
 
-<siga:pagina titulo="Serviços">
+<siga:pagina titulo="Atributos">
 	
 	<jsp:include page="../main.jsp"></jsp:include>
 	
@@ -48,6 +48,7 @@
 	<div class="gt-bd clearfix">
 		<div class="gt-content">
 			<h2>Pesquisa de atributos</h2>
+					 
 			<!-- content bomex -->
 			<div class="gt-content-box dataTables_div">
 				<div class="gt-form-row dataTables_length">
@@ -57,7 +58,7 @@
 					</label>
 				</div>
 				
-				<table id="atributo_table" border="0" class="gt-table display">
+				<table id="atributo_table" class="gt-table display">
 					<thead>
 						<tr>
 							<th>Nome</th>
@@ -156,6 +157,7 @@
 	});
 	
 	opts.dataTable= $('#atributo_table').dataTable({
+		    stateSave : true,
 			"language": {
 				"emptyTable":     "Não existem resultados",
 			    "info":           "Mostrando de _START_ a _END_ do total de _TOTAL_ registros",
