@@ -304,7 +304,7 @@
 	      		acordoService.populateFromJSonList(listaJSon, associacaoTable);
 	      	 },
 	      	 error: function(error) {
-	          	alert("N�o foi poss�vel carregar as Abrang�ncias deste Acordo.");
+	          	alert("Não foi possível carregar as Abrangências deste Acordo.");
 	      	 }
        });
     });
@@ -370,10 +370,10 @@
 		isEditing = isEdicao;
 		
 		if (isEdicao)
-			jQuery("#associacao_dialog").dialog('option', 'title', 'Alterar Abrang�ncia');
+			jQuery("#associacao_dialog").dialog('option', 'title', 'Alterar Abrangência');
 		else {
 			configuracaoItemAcaoService.atualizaDadosTabelaItemAcao({});
-			jQuery("#associacao_dialog").dialog('option', 'title', 'Incluir Abrang�ncia');
+			jQuery("#associacao_dialog").dialog('option', 'title', 'Incluir Abrangência');
 		}
 		jQuery("#associacao_dialog").dialog('open');
 	};
